@@ -24,8 +24,8 @@ wait-for-it 1.0.0
 
 ## Examples
 
-```
-# ./go-wait-for-it -t 2 -s :631 -s localhost:631 -s 127.0.0.1:631 -- echo 'CUPS is available' ; echo $?
+```console
+$ ./go-wait-for-it -t 2 -s :631 -s localhost:631 -s 127.0.0.1:631 -- echo 'CUPS is available' ; echo $?
 [*] Trying to connect to :631...
 [*] Trying to connect to localhost:631...
 [*] Trying to connect to 127.0.0.1:631...
