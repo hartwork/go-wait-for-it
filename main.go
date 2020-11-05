@@ -60,8 +60,7 @@ func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, re
 	results <- ConnectResult{address, duration, success}
 }
 
-func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout time.Duration, log logging.Log) bool {
-	success := true
+func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout time.Duration, log logging.Log) (err error) {
 	results := make(chan ConnectResult)
 
 	for _, address := range addresses {
@@ -73,8 +72,8 @@ func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 		result := <-results
 
 		if !result.success {
-			success = false
-			log.Error(fmt.Sprintf("Failed to connected to %s for %s.", result.address, result.duration))
+			err = fmt.Errorf("Failed to connected to %s for %s.", result.address, result.duration)
+			log.Error(err.Error())
 			log.Error("Aborting...")
 			break
 		}
@@ -82,7 +81,7 @@ func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 		log.Success(fmt.Sprintf("Connected to %s after %s.", result.address, result.duration))
 	}
 
-	return success
+	return err
 }
 
 func runCommand(argv []string, log logging.Log) int {
@@ -111,7 +110,7 @@ func main() {
 	config := cli.Parse(os.Args)
 	log := logging.Log{Quiet: config.Quiet}
 
-	if !waitForMultipleAddressesWithTimeout(config.Addresses, config.Timeout, log) {
+	if err := waitForMultipleAddressesWithTimeout(config.Addresses, config.Timeout, log); err != nil {
 		os.Exit(1)
 	}
 
