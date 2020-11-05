@@ -6,8 +6,8 @@ package syntax
 
 import (
 	"fmt"
+	"net"
 	"strconv"
-	"strings"
 )
 
 type Address struct {
@@ -30,12 +30,12 @@ func (e MalformedAddressError) Error() string {
 func ParseAddress(text string) (address Address, syntaxError error) {
 	syntaxError = MalformedAddressError{text}
 
-	parts := strings.Split(text, ":")
-	if len(parts) != 2 {
+	host, portText, err := net.SplitHostPort(text)
+	if err != nil {
 		return
 	}
 
-	port, err := strconv.Atoi(parts[1])
+	port, err := strconv.Atoi(portText)
 	if err != nil {
 		return
 	}
@@ -44,5 +44,5 @@ func ParseAddress(text string) (address Address, syntaxError error) {
 		return
 	}
 
-	return Address{parts[0], uint16(port)}, nil
+	return Address{host, uint16(port)}, nil
 }
