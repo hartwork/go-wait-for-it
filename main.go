@@ -69,15 +69,17 @@ func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 		go waitForAddressWithTimeout(address, timeout, results)
 	}
 
-	for replies := 0; success && replies < len(addresses); replies++ {
+	for _ = range addresses {
 		result := <-results
-		if result.success {
-			log.Success(fmt.Sprintf("Connected to %s after %s.", result.address, result.duration))
-		} else {
+
+		if !result.success {
 			success = false
 			log.Error(fmt.Sprintf("Failed to connected to %s for %s.", result.address, result.duration))
 			log.Error("Aborting...")
+			break
 		}
+
+		log.Success(fmt.Sprintf("Connected to %s after %s.", result.address, result.duration))
 	}
 
 	return success
