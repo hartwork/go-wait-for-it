@@ -23,7 +23,7 @@ type ConnectResult struct {
 	success  bool
 }
 
-func waitForAddress(address syntax.Address) chan bool {
+func waitForAddress(address syntax.Address) <-chan bool {
 	available := make(chan bool)
 	go func() {
 		for {
@@ -39,7 +39,7 @@ func waitForAddress(address syntax.Address) chan bool {
 	return available
 }
 
-func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, results chan ConnectResult) {
+func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, results chan<- ConnectResult) {
 	duration := timeout
 	success := false
 
