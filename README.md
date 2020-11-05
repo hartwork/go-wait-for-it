@@ -55,3 +55,16 @@ Flags:
   -t, --timeout uint      timeout in seconds, 0 for no timeout (default 15)
   -v, --version           version for wait-for-it
 ```
+
+
+## Alternatives
+
+### Go
+
+- [`github.com/alioygur/wait-for`](https://github.com/alioygur/wait-for)
+- [`github.com/maxcnunes/waitforit`](https://github.com/maxcnunes/waitforit)
+
+
+### Python
+
+- [`wait-for-it`](https://github.com/clarketm/wait-for-it)
