@@ -24,7 +24,7 @@ type ConnectResult struct {
 }
 
 func waitForAddress(address syntax.Address) <-chan bool {
-	available := make(chan bool)
+	available := make(chan bool, 1)
 	go func() {
 		for {
 			c, err := net.Dial("tcp", address.String())
@@ -61,7 +61,7 @@ func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, re
 }
 
 func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout time.Duration, log logging.Log) (err error) {
-	results := make(chan ConnectResult)
+	results := make(chan ConnectResult, len(addresses))
 
 	for _, address := range addresses {
 		log.Neutral(fmt.Sprintf("Trying to connect to %s...", address))
