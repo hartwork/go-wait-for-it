@@ -28,3 +28,14 @@ jobs:
               -- \
               sh -c 'exit 123' \
             || [ $? = 123 ]
+      - name: Require empty diff for goimports
+        run: |-
+          set -e
+          go get golang.org/x/tools/cmd/goimports
+          git ls-files \*.go | xargs goimports -w
+          git ls-files \*.go | xargs git diff --exit-code --
+      - name: Require empty diff for gofmt
+        run: |-
+          set -e
+          git ls-files \*.go | xargs gofmt -s -w
+          git ls-files \*.go | xargs git diff --exit-code --
