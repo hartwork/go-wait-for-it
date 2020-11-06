@@ -4,7 +4,7 @@
 
 **go-wait-for-it** is a mostly complete re-write of
 Python [wait-for-it](https://github.com/clarketm/wait-for-it)
-in Go: as an *exercise* in writing code in Go and for *fun*.
+in Go 1.14+: as an *exercise* in writing code in Go and for *fun*.
 To be clear, there is nothing wrong with the Python version: it's fine.
 
 **go-wait-for-it** is my first full program written in Go
@@ -16,6 +16,8 @@ The goal is to have production level Go code in here, *eventually*.
 ## Build and run
 
 ```console
+$ go version
+go version go1.14.6 linux/amd64
 $ go build .
 $ ./go-wait-for-it --version
 wait-for-it 1.0.0
