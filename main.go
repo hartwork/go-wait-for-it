@@ -69,17 +69,14 @@ func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 	}
 
 	for range addresses {
-		result := <-results
-
-		if result.err != nil {
+		if result := <-results; result.err == nil {
+			log.Success("Connected to %s after %s.", result.address, result.duration)
+		} else {
 			log.Error(result.err.Error())
-			err = result.err
-			log.Error("Aborting...")
-			break
+			err = result.err // the first error is as good as the last, here
 		}
-
-		log.Success("Connected to %s after %s.", result.address, result.duration)
 	}
+	close(results)
 
 	return err
 }
@@ -111,6 +108,7 @@ func main() {
 	log := logging.Log{Quiet: config.Quiet}
 
 	if err := waitForMultipleAddressesWithTimeout(config.Addresses, config.Timeout, log); err != nil {
+		log.Error("Aborting...")
 		os.Exit(1)
 	}
 
