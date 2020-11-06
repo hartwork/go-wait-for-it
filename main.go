@@ -64,7 +64,7 @@ func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 	results := make(chan ConnectResult, len(addresses))
 
 	for _, address := range addresses {
-		log.Neutral(fmt.Sprintf("Trying to connect to %s...", address))
+		log.Neutral("Trying to connect to %s...", address)
 		go waitForAddressWithTimeout(address, timeout, results)
 	}
 
@@ -78,7 +78,7 @@ func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 			break
 		}
 
-		log.Success(fmt.Sprintf("Connected to %s after %s.", result.address, result.duration))
+		log.Success("Connected to %s after %s.", result.address, result.duration)
 	}
 
 	return err
@@ -89,7 +89,7 @@ func runCommand(argv []string, log logging.Log) int {
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
 
-	log.Neutral(fmt.Sprintf("Running command: %s", strings.Join(argv, " ")))
+	log.Neutral("Running command: %s", strings.Join(argv, " "))
 	err := command.Run()
 
 	if err == nil {
@@ -97,7 +97,7 @@ func runCommand(argv []string, log logging.Log) int {
 		return 0
 	}
 
-	log.Error(fmt.Sprintf("Error: %v", err))
+	log.Error("Error: %v", err)
 
 	if exitError, ok := err.(*exec.ExitError); ok {
 		return exitError.ExitCode()

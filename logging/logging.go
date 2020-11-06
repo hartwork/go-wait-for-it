@@ -12,21 +12,30 @@ type Log struct {
 	Quiet bool
 }
 
-func (l Log) log(prefix, message string) {
+func (l Log) log(prefix string, format string, args []interface{}) {
 	if l.Quiet {
 		return
 	}
+
+	var message string
+
+	if len(args) > 0 {
+		message = fmt.Sprintf(format, args...)
+	} else {
+		message = format
+	}
+
 	fmt.Printf("%s %s\n", prefix, message)
 }
 
-func (l Log) Neutral(message string) {
-	l.log("[*]", message)
+func (l Log) Neutral(format string, args ...interface{}) {
+	l.log("[*]", format, args)
 }
 
-func (l Log) Error(message string) {
-	l.log("[-]", message)
+func (l Log) Error(format string, args ...interface{}) {
+	l.log("[-]", format, args)
 }
 
-func (l Log) Success(message string) {
-	l.log("[+]", message)
+func (l Log) Success(format string, args ...interface{}) {
+	l.log("[+]", format, args)
 }
