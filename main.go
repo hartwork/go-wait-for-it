@@ -12,12 +12,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hartwork/go-wait-for-it/cli"
-	"github.com/hartwork/go-wait-for-it/logging"
-	"github.com/hartwork/go-wait-for-it/syntax"
+	"github.com/hartwork/go-wait-for-it/internal/cli"
+	"github.com/hartwork/go-wait-for-it/internal/logging"
+	"github.com/hartwork/go-wait-for-it/internal/syntax"
 )
 
-type ConnectResult struct {
+type connectResult struct {
 	address  syntax.Address
 	duration time.Duration
 	err      error
@@ -39,7 +39,7 @@ func waitForAddress(address syntax.Address) <-chan bool {
 	return available
 }
 
-func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, startedAt time.Time, results chan<- ConnectResult) {
+func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, startedAt time.Time, results chan<- connectResult) {
 	duration := timeout
 
 	deadline := make(<-chan time.Time)
@@ -56,11 +56,11 @@ func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, st
 		err = fmt.Errorf("Failed to connected to %s for %s.", address, timeout)
 	}
 
-	results <- ConnectResult{address, duration, err}
+	results <- connectResult{address, duration, err}
 }
 
 func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout time.Duration, log logging.Log) (err error) {
-	results := make(chan ConnectResult, len(addresses))
+	results := make(chan connectResult, len(addresses))
 	startedAt := time.Now()
 
 	for _, address := range addresses {
