@@ -13,3 +13,14 @@ updates:
       - "enhancement"
     schedule:
       interval: "weekly"
+
+  - package-ecosystem: "gomod"
+    commit-message:
+      include: "scope"
+      prefix: "requirements"
+    directory: "/"
+    labels:
+      - "dependencies"
+      - "enhancement"
+    schedule:
+      interval: "weekly"
