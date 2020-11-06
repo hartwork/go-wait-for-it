@@ -39,7 +39,7 @@ func waitForAddress(address syntax.Address) <-chan bool {
 	return available
 }
 
-func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, results chan<- ConnectResult) {
+func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, startedAt time.Time, results chan<- ConnectResult) {
 	duration := timeout
 
 	deadline := make(<-chan time.Time)
@@ -47,12 +47,11 @@ func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, re
 		deadline = time.After(timeout)
 	}
 
-	before := time.Now()
 	err := error(nil)
 
 	select {
 	case <-waitForAddress(address):
-		duration = time.Now().Sub(before)
+		duration = time.Now().Sub(startedAt)
 	case <-deadline:
 		err = fmt.Errorf("Failed to connected to %s for %s.", address, timeout)
 	}
@@ -62,10 +61,11 @@ func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, re
 
 func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout time.Duration, log logging.Log) (err error) {
 	results := make(chan ConnectResult, len(addresses))
+	startedAt := time.Now()
 
 	for _, address := range addresses {
 		log.Neutral("Trying to connect to %s...", address)
-		go waitForAddressWithTimeout(address, timeout, results)
+		go waitForAddressWithTimeout(address, timeout, startedAt, results)
 	}
 
 	for range addresses {
