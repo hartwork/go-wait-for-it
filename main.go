@@ -20,7 +20,7 @@ import (
 type ConnectResult struct {
 	address  syntax.Address
 	duration time.Duration
-	success  bool
+	err      error
 }
 
 func waitForAddress(address syntax.Address) <-chan bool {
@@ -41,7 +41,6 @@ func waitForAddress(address syntax.Address) <-chan bool {
 
 func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, results chan<- ConnectResult) {
 	duration := timeout
-	success := false
 
 	deadline := make(<-chan time.Time)
 	if timeout > 0 {
@@ -49,15 +48,16 @@ func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, re
 	}
 
 	before := time.Now()
+	err := error(nil)
 
 	select {
 	case <-waitForAddress(address):
 		duration = time.Now().Sub(before)
-		success = true
 	case <-deadline:
+		err = fmt.Errorf("Failed to connected to %s for %s.", address, timeout)
 	}
 
-	results <- ConnectResult{address, duration, success}
+	results <- ConnectResult{address, duration, err}
 }
 
 func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout time.Duration, log logging.Log) (err error) {
@@ -71,9 +71,9 @@ func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 	for range addresses {
 		result := <-results
 
-		if !result.success {
-			err = fmt.Errorf("Failed to connected to %s for %s.", result.address, result.duration)
-			log.Error(err.Error())
+		if result.err != nil {
+			log.Error(result.err.Error())
+			err = result.err
 			log.Error("Aborting...")
 			break
 		}
