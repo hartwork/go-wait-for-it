@@ -1,0 +1,30 @@
+# Copyright (C) 2020 Sebastian Pipping <sebastian@pipping.org>
+# Licensed under GPL v3 or later
+
+name: Build and test
+
+on:
+- pull_request
+- push
+
+jobs:
+  build_and_test:
+    name: Build and test
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.14'
+      - name: Build and test
+        run: |-
+          set -e
+          go build .
+          ./go-wait-for-it --help
+          ./go-wait-for-it \
+              --timeout 2 \
+              --service github.com:80 \
+              --service github.com:443 \
+              -- \
+              sh -c 'exit 123' \
+            || [ $? = 123 ]
