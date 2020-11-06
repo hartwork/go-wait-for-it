@@ -68,7 +68,7 @@ func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 		go waitForAddressWithTimeout(address, timeout, results)
 	}
 
-	for _ = range addresses {
+	for range addresses {
 		result := <-results
 
 		if !result.success {
