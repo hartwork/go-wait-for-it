@@ -28,9 +28,7 @@ func collect(t *testing.T, file *os.File) string {
 	return string(bytes)
 }
 
-func assertOutputEquals(t *testing.T, actUpon func(log Log), fileToMock **os.File, expectedOutput string) {
-	log := Log{Quiet: false}
-
+func assertOutputEquals(t *testing.T, act func(), fileToMock **os.File, expectedOutput string) {
 	originalFile := *fileToMock
 	defer func() {
 		*fileToMock = originalFile
@@ -39,31 +37,39 @@ func assertOutputEquals(t *testing.T, actUpon func(log Log), fileToMock **os.Fil
 	*fileToMock = newMemoryFile(t)
 	defer (*fileToMock).Close()
 
-	actUpon(log)
+	act()
 
 	assert.Equal(t, collect(t, *fileToMock), expectedOutput)
 }
 
 func TestLoggingPlain(t *testing.T) {
-	assertOutputEquals(t, func(log Log) {
+	log := Log{Quiet: false}
+
+	assertOutputEquals(t, func() {
 		log.Neutral("111")
 	}, &os.Stdout, "[*] 111\n")
-	assertOutputEquals(t, func(log Log) {
+
+	assertOutputEquals(t, func() {
 		log.Success("222")
 	}, &os.Stdout, "[+] 222\n")
-	assertOutputEquals(t, func(log Log) {
+
+	assertOutputEquals(t, func() {
 		log.Error("333")
 	}, &os.Stdout, "[-] 333\n")
 }
 
 func TestLoggingSprintf(t *testing.T) {
-	assertOutputEquals(t, func(log Log) {
+	log := Log{Quiet: false}
+
+	assertOutputEquals(t, func() {
 		log.Neutral("%s %s", "111", "222")
 	}, &os.Stdout, "[*] 111 222\n")
-	assertOutputEquals(t, func(log Log) {
+
+	assertOutputEquals(t, func() {
 		log.Success("%s %s", "333", "444")
 	}, &os.Stdout, "[+] 333 444\n")
-	assertOutputEquals(t, func(log Log) {
+
+	assertOutputEquals(t, func() {
 		log.Error("%s %s", "555", "666")
 	}, &os.Stdout, "[-] 555 666\n")
 }
