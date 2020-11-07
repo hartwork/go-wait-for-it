@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -38,4 +39,41 @@ func TestWaitForAddress(t *testing.T) {
 			t.Errorf("waitForAddress should be long done by now.")
 		}
 	}
+}
+
+func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
+	listener, err := net.Listen("tcp", ":0")
+	require.Nil(t, err)
+	defer listener.Close()
+
+	address, err := syntax.ParseAddress(listener.Addr().String())
+	assert.Nil(t, err)
+
+	timeout := 2 * time.Second
+	startedAt := time.Now()
+	results := make(chan connectResult)
+
+	go waitForAddressWithTimeout(address, timeout, startedAt, results)
+
+	result := <-results
+	assert.Nil(t, result.err)
+}
+
+func TestWaitForAddressWithTimeoutFailure(t *testing.T) {
+	listener, err := net.Listen("tcp", ":0")
+	require.Nil(t, err)
+
+	address, err := syntax.ParseAddress(listener.Addr().String())
+	assert.Nil(t, err)
+
+	listener.Close()
+
+	timeout := 100 * time.Millisecond // small to not blow up test runtime
+	startedAt := time.Now()
+	results := make(chan connectResult)
+
+	go waitForAddressWithTimeout(address, timeout, startedAt, results)
+
+	result := <-results
+	assert.NotNil(t, result.err)
 }
