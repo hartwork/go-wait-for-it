@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net"
 	"strconv"
+	"strings"
 )
 
 type Address struct {
@@ -46,6 +47,10 @@ func ParseAddress(text string) (address Address, syntaxError error) {
 
 	if port <= 0 || port >= 1<<16 {
 		return
+	}
+
+	if strings.Contains(host, ":") {
+		host = "[" + host + "]" // wrapping of IPv6 addresses
 	}
 
 	return Address{host, uint16(port)}, nil
