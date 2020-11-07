@@ -104,7 +104,14 @@ func runCommand(argv []string, log logging.Log) int {
 }
 
 func main() {
-	config := cli.Parse(os.Args[1:])
+	config, err := cli.Parse(os.Args[1:])
+	if err != nil {
+		os.Exit(1)
+	}
+	if config == nil { // i.e. help output has just been presented
+		os.Exit(0)
+	}
+
 	log := logging.Log{Quiet: config.Quiet}
 
 	if err := waitForMultipleAddressesWithTimeout(config.Addresses, config.Timeout, log); err != nil {

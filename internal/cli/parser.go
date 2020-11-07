@@ -6,7 +6,6 @@ package cli
 
 import (
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
@@ -24,24 +23,33 @@ func report(err error) {
 	fmt.Println("Error:", err)
 }
 
-func Parse(args []string) (config Config) {
+func Parse(args []string) (config *Config, err error) {
 	var services []string
+	var quiet bool
 	var timeoutSeconds uint
 
 	rootCommand := &cobra.Command{
 		Use:  "wait-for-it [flags] [-s|--service [HOST]:PORT]... [--] [COMMAND [ARG ..]]",
 		Long: "Wait for service(s) to be available before executing a command.",
 		Run: func(cmd *cobra.Command, args []string) {
-			config.Argv = args
-			config.Timeout = time.Duration(timeoutSeconds) * time.Second
+			timeout := time.Duration(timeoutSeconds) * time.Second
 
+			var addresses []syntax.Address
 			for _, service := range services {
-				address, err := syntax.ParseAddress(service)
-				if err != nil {
-					report(err)
-					os.Exit(1)
+				address, syntaxError := syntax.ParseAddress(service)
+				if syntaxError != nil {
+					report(syntaxError)
+					err = syntaxError // the first error is as good as the last, here
+					continue
 				}
-				config.Addresses = append(config.Addresses, address)
+				addresses = append(addresses, address)
+			}
+
+			config = &Config{
+				addresses,
+				args,
+				quiet,
+				timeout,
 			}
 		},
 		Version: "1.0.0",
@@ -54,15 +62,15 @@ func Parse(args []string) (config Config) {
 		"services to test (format '[HOST]:PORT')")
 	rootCommand.Flags().UintVarP(&timeoutSeconds, "timeout", "t",
 		15, "timeout in seconds, 0 for no timeout")
-	rootCommand.Flags().BoolVarP(&config.Quiet, "quiet", "q",
+	rootCommand.Flags().BoolVarP(&quiet, "quiet", "q",
 		false, "do not output any status messages")
 
 	rootCommand.SetArgs(args)
 
-	if err := rootCommand.Execute(); err != nil {
-		report(err)
-		os.Exit(1)
+	if executeError := rootCommand.Execute(); executeError != nil {
+		report(executeError)
+		err = executeError
 	}
 
-	return config
+	return config, err
 }
