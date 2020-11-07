@@ -68,4 +68,15 @@ Flags:
 
 ### Python
 
-- [`wait-for-it`](https://github.com/clarketm/wait-for-it)
+- [`github.com/clarketm/wait-for-it`](https://github.com/clarketm/wait-for-it)
+  — package `wait-for-it` [on PyPI](https://pypi.org/project/wait-for-it/)
+- [`github.com/David-Lor/python-wait4it`](https://github.com/David-Lor/python-wait4it/)
+  — package `wait4it` [on PyPI](https://pypi.org/project/wait4it/)
+
+
+### Shell
+
+- [`github.com/eficode/wait-for`](https://github.com/eficode/wait-for)
+  — POSIX shell
+- [`github.com/vishnubob/wait-for-it`](https://github.com/vishnubob/wait-for-it)
+  — Bash, package `wait-for-it` [in Debian](https://packages.debian.org/unstable/wait-for-it)
