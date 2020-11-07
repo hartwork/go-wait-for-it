@@ -42,3 +42,19 @@ func TestLoggingSprintf(t *testing.T) {
 		log.Error("%s %s", "555", "666")
 	}, &os.Stdout, "[-] 555 666\n")
 }
+
+func TestLoggingQuiet(t *testing.T) {
+	log := Log{Quiet: true}
+
+	mocking.AssertOutputEquals(t, func() {
+		log.Neutral("111")
+	}, &os.Stdout, "")
+
+	mocking.AssertOutputEquals(t, func() {
+		log.Success("222")
+	}, &os.Stdout, "")
+
+	mocking.AssertOutputEquals(t, func() {
+		log.Error("333")
+	}, &os.Stdout, "")
+}
