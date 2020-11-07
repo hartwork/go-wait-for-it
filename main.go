@@ -103,24 +103,29 @@ func runCommand(argv []string, log logging.Log) int {
 	return 127
 }
 
-func main() {
-	config, err := cli.Parse(os.Args[1:])
+func innerMain(argv []string) int {
+	config, err := cli.Parse(argv[1:])
 	if err != nil {
-		os.Exit(1)
+		return 1
 	}
 	if config == nil { // i.e. help output has just been presented
-		os.Exit(0)
+		return 0
 	}
 
 	log := logging.Log{Quiet: config.Quiet}
 
 	if err := waitForMultipleAddressesWithTimeout(config.Addresses, config.Timeout, log); err != nil {
 		log.Error("Aborting...")
-		os.Exit(1)
+		return 1
 	}
 
 	if len(config.Argv) > 0 {
-		exitCode := runCommand(config.Argv, log)
-		os.Exit(exitCode)
+		return runCommand(config.Argv, log)
 	}
+
+	return 0
+}
+
+func main() {
+	os.Exit(innerMain(os.Args))
 }
