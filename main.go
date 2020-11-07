@@ -104,7 +104,7 @@ func runCommand(argv []string, log logging.Log) int {
 }
 
 func main() {
-	config := cli.Parse(os.Args)
+	config := cli.Parse(os.Args[1:])
 	log := logging.Log{Quiet: config.Quiet}
 
 	if err := waitForMultipleAddressesWithTimeout(config.Addresses, config.Timeout, log); err != nil {

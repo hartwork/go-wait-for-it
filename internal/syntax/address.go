@@ -35,6 +35,10 @@ func ParseAddress(text string) (address Address, syntaxError error) {
 		return
 	}
 
+	if len(portText) > 0 && portText[0] == '0' { // deny leading zeros
+		return
+	}
+
 	port, err := strconv.Atoi(portText)
 	if err != nil {
 		return
