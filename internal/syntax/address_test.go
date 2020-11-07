@@ -39,8 +39,8 @@ func TestParserWellFormed(t *testing.T) {
 	for _, test := range tests {
 		address, err := ParseAddress(test.candidate)
 		assert.Nil(t, err)
-		assert.Equal(t, address.host, test.expectedHost)
-		assert.Equal(t, address.port, test.expectedPort)
+		assert.Equal(t, address.Host, test.expectedHost)
+		assert.Equal(t, address.Port, test.expectedPort)
 	}
 }
 

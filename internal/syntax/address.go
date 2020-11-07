@@ -12,12 +12,12 @@ import (
 )
 
 type Address struct {
-	host string
-	port uint16
+	Host string
+	Port uint16
 }
 
 func (a Address) String() string {
-	return fmt.Sprintf("%s:%d", a.host, a.port)
+	return fmt.Sprintf("%s:%d", a.Host, a.Port)
 }
 
 type MalformedAddressError struct {

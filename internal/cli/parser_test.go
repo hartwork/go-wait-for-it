@@ -12,12 +12,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func toAddress(t *testing.T, text string) syntax.Address {
-	address, err := syntax.ParseAddress(text)
-	assert.Nil(t, err)
-	return address
-}
-
 func TestParserWellFormed(t *testing.T) {
 	tests := []struct {
 		args           []string
@@ -40,7 +34,7 @@ func TestParserWellFormed(t *testing.T) {
 				"--",
 				"echo", "hello",
 			}, Config{
-				[]syntax.Address{toAddress(t, "h1:1"), toAddress(t, "h2:2")},
+				[]syntax.Address{{"h1", 1}, {"h2", 2}},
 				[]string{"echo", "hello"},
 				true,
 				2 * time.Second,
