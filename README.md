@@ -74,6 +74,12 @@ Flags:
   — package `wait4it` [on PyPI](https://pypi.org/project/wait4it/)
 
 
+### Rust
+
+- [`github.com/shenek/wait-for-them`](https://github.com/shenek/wait-for-them)
+  — package `wait-for-them` [on crates.io](https://crates.io/crates/wait-for-them)
+
+
 ### Shell
 
 - [`github.com/eficode/wait-for`](https://github.com/eficode/wait-for)
