@@ -81,7 +81,7 @@ func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 	return err
 }
 
-func runCommand(argv []string, log logging.Log) int {
+func runCommand(argv []string, log logging.Log) error {
 	command := exec.Command(argv[0], argv[1:]...)
 	command.Stdout = os.Stdout
 	command.Stderr = os.Stderr
@@ -91,41 +91,51 @@ func runCommand(argv []string, log logging.Log) int {
 
 	if err == nil {
 		log.Success("Command succeeded.")
+	} else {
+		log.Error("Error: %v", err)
+	}
+	return err
+}
+
+func exitCodeFrom(err error) int {
+	if err == nil {
 		return 0
 	}
-
-	log.Error("Error: %v", err)
 
 	if exitError, ok := err.(*exec.ExitError); ok {
 		return exitError.ExitCode()
 	}
 
-	return 127
+	if _, ok := err.(*exec.Error); ok {
+		return 127
+	}
+
+	return 1
 }
 
-func innerMain(argv []string) int {
+func innerMain(argv []string) error {
 	config, err := cli.Parse(argv[1:])
 	if err != nil {
-		return 1
+		return err
 	}
 	if config == nil { // i.e. help output has just been presented
-		return 0
+		return nil
 	}
 
 	log := logging.Log{Quiet: config.Quiet}
 
 	if err := waitForMultipleAddressesWithTimeout(config.Addresses, config.Timeout, log); err != nil {
 		log.Error("Aborting...")
-		return 1
+		return err
 	}
 
 	if len(config.Argv) > 0 {
 		return runCommand(config.Argv, log)
 	}
 
-	return 0
+	return nil
 }
 
 func main() {
-	os.Exit(innerMain(os.Args))
+	os.Exit(exitCodeFrom(innerMain(os.Args)))
 }
