@@ -8,15 +8,16 @@ import (
 	"fmt"
 	"net"
 	"strconv"
+	"strings"
 )
 
 type Address struct {
-	host string
-	port uint16
+	Host string
+	Port uint16
 }
 
 func (a Address) String() string {
-	return fmt.Sprintf("%s:%d", a.host, a.port)
+	return fmt.Sprintf("%s:%d", a.Host, a.Port)
 }
 
 type MalformedAddressError struct {
@@ -46,6 +47,10 @@ func ParseAddress(text string) (address Address, syntaxError error) {
 
 	if port <= 0 || port >= 1<<16 {
 		return
+	}
+
+	if strings.Contains(host, ":") {
+		host = "[" + host + "]" // wrapping of IPv6 addresses
 	}
 
 	return Address{host, uint16(port)}, nil

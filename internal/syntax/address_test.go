@@ -34,12 +34,13 @@ func TestParserWellFormed(t *testing.T) {
 		{"host:1", "host", 1},         // minimum port number
 		{"host:65535", "host", 65535}, // maximum port number
 		{":123", "", 123},             // hostname absent
+		{"[::]:123", "[::]", 123},     // wrapped IPv6 address
 	}
 	for _, test := range tests {
 		address, err := ParseAddress(test.candidate)
 		assert.Nil(t, err)
-		assert.Equal(t, address.host, test.expectedHost)
-		assert.Equal(t, address.port, test.expectedPort)
+		assert.Equal(t, address.Host, test.expectedHost)
+		assert.Equal(t, address.Port, test.expectedPort)
 	}
 }
 
@@ -51,6 +52,7 @@ func TestParserMalformed(t *testing.T) {
 		"host:0",     // below minimum port number
 		"host:65536", // above maximum port number
 		"host:01",    // forbidden leading zeros
+		":::1",       // IPv6 address without [..] wrapper
 	}
 
 	for _, candidate := range tests {
