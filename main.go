@@ -8,12 +8,11 @@ import (
 	"fmt"
 	"net"
 	"os"
-	"os/exec"
-	"strings"
 	"time"
 
 	"github.com/hartwork/go-wait-for-it/internal/cli"
 	"github.com/hartwork/go-wait-for-it/internal/logging"
+	"github.com/hartwork/go-wait-for-it/internal/subprocess"
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
 )
 
@@ -81,38 +80,6 @@ func waitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 	return err
 }
 
-func runCommand(argv []string, log logging.Log) error {
-	command := exec.Command(argv[0], argv[1:]...)
-	command.Stdout = os.Stdout
-	command.Stderr = os.Stderr
-
-	log.Neutral("Running command: %s", strings.Join(argv, " "))
-	err := command.Run()
-
-	if err == nil {
-		log.Success("Command succeeded.")
-	} else {
-		log.Error("Error: %v", err)
-	}
-	return err
-}
-
-func exitCodeFrom(err error) int {
-	if err == nil {
-		return 0
-	}
-
-	if exitError, ok := err.(*exec.ExitError); ok {
-		return exitError.ExitCode()
-	}
-
-	if _, ok := err.(*exec.Error); ok {
-		return 127
-	}
-
-	return 1
-}
-
 func innerMain(argv []string) error {
 	config, err := cli.Parse(argv[1:])
 	if err != nil {
@@ -130,12 +97,12 @@ func innerMain(argv []string) error {
 	}
 
 	if len(config.Argv) > 0 {
-		return runCommand(config.Argv, log)
+		return subprocess.RunCommand(config.Argv, log)
 	}
 
 	return nil
 }
 
 func main() {
-	os.Exit(exitCodeFrom(innerMain(os.Args)))
+	os.Exit(subprocess.ExitCodeFrom(innerMain(os.Args)))
 }
