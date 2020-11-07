@@ -10,6 +10,7 @@ import (
 
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParserWellFormed(t *testing.T) {
@@ -54,7 +55,9 @@ func TestParserWellFormed(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		config := Parse(test.args)
-		assert.Equal(t, config, test.expectedConfig)
+		config, err := Parse(test.args)
+		assert.Nil(t, err)
+		require.NotNil(t, config)
+		assert.Equal(t, *config, test.expectedConfig)
 	}
 }
