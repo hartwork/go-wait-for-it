@@ -53,7 +53,7 @@ func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, st
 	case <-waitForAddress(address):
 		duration = time.Now().Sub(startedAt)
 	case <-deadline:
-		err = fmt.Errorf("Failed to connected to %s for %s.", address, timeout)
+		err = fmt.Errorf("Failed to connect to %s for %s.", address, timeout)
 	}
 
 	results <- connectResult{address, duration, err}
