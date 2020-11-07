@@ -57,6 +57,8 @@ func Parse(args []string) (config Config) {
 	rootCommand.Flags().BoolVarP(&config.Quiet, "quiet", "q",
 		false, "do not output any status messages")
 
+	rootCommand.SetArgs(args)
+
 	if err := rootCommand.Execute(); err != nil {
 		report(err)
 		os.Exit(1)
