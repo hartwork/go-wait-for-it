@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWithAvailablePort(t *testing.T) {
-	WithAvailablePort(t, func(a1 syntax.Address) {
-		WithAvailablePort(t, func(a2 syntax.Address) {
+func TestWithListeningPort(t *testing.T) {
+	WithListeningPort(t, func(a1 syntax.Address) {
+		WithListeningPort(t, func(a2 syntax.Address) {
 			assert.NotEqual(t, a1.Port, 0)
 			assert.NotEqual(t, a2.Port, 0)
 			assert.NotEqual(t, a1.Port, a2.Port)
@@ -21,9 +21,9 @@ func TestWithAvailablePort(t *testing.T) {
 	})
 }
 
-func TestWithUnavailablePort(t *testing.T) {
-	WithUnavailablePort(t, func(a1 syntax.Address) {
-		WithUnavailablePort(t, func(a2 syntax.Address) {
+func TestWithUnusedPort(t *testing.T) {
+	WithUnusedPort(t, func(a1 syntax.Address) {
+		WithUnusedPort(t, func(a2 syntax.Address) {
 			assert.NotEqual(t, a1.Port, 0)
 			assert.NotEqual(t, a2.Port, 0)
 			// Note: There is no guarantee that the two ports are unequal

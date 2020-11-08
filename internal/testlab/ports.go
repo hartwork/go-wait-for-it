@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func WithAvailablePort(t *testing.T, actUpon func(syntax.Address)) {
+func WithListeningPort(t *testing.T, actUpon func(syntax.Address)) {
 	listener, err := net.Listen("tcp", ":0")
 	require.Nil(t, err)
 	defer listener.Close()
@@ -23,7 +23,7 @@ func WithAvailablePort(t *testing.T, actUpon func(syntax.Address)) {
 	actUpon(address)
 }
 
-func WithUnavailablePort(t *testing.T, actUpon func(syntax.Address)) {
+func WithUnusedPort(t *testing.T, actUpon func(syntax.Address)) {
 	listener, err := net.Listen("tcp", ":0")
 	require.Nil(t, err)
 

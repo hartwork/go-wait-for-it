@@ -15,7 +15,7 @@ import (
 )
 
 func TestWaitForAddress(t *testing.T) {
-	testlab.WithAvailablePort(t, func(address syntax.Address) {
+	testlab.WithListeningPort(t, func(address syntax.Address) {
 		port := address.Port
 
 		addresses := []syntax.Address{
@@ -38,7 +38,7 @@ func TestWaitForAddress(t *testing.T) {
 }
 
 func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
-	testlab.WithAvailablePort(t, func(address syntax.Address) {
+	testlab.WithListeningPort(t, func(address syntax.Address) {
 		timeout := 2 * time.Second
 		startedAt := time.Now()
 		results := make(chan connectResult)
@@ -51,7 +51,7 @@ func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
 }
 
 func TestWaitForAddressWithTimeoutFailure(t *testing.T) {
-	testlab.WithUnavailablePort(t, func(address syntax.Address) {
+	testlab.WithUnusedPort(t, func(address syntax.Address) {
 		timeout := 100 * time.Millisecond // small to not blow up test runtime
 		startedAt := time.Now()
 		results := make(chan connectResult)
@@ -64,8 +64,8 @@ func TestWaitForAddressWithTimeoutFailure(t *testing.T) {
 }
 
 func TestWaitForMultipleAddressesWithTimeoutSuccess(t *testing.T) {
-	testlab.WithAvailablePort(t, func(a1 syntax.Address) {
-		testlab.WithAvailablePort(t, func(a2 syntax.Address) {
+	testlab.WithListeningPort(t, func(a1 syntax.Address) {
+		testlab.WithListeningPort(t, func(a2 syntax.Address) {
 			addresses := []syntax.Address{a1, a2}
 			timeout := 2 * time.Second
 			log := logging.Log{Quiet: true}
@@ -78,8 +78,8 @@ func TestWaitForMultipleAddressesWithTimeoutSuccess(t *testing.T) {
 }
 
 func TestWaitForMultipleAddressesWithTimeoutFailure(t *testing.T) {
-	testlab.WithAvailablePort(t, func(a1 syntax.Address) {
-		testlab.WithUnavailablePort(t, func(a2 syntax.Address) {
+	testlab.WithListeningPort(t, func(a1 syntax.Address) {
+		testlab.WithUnusedPort(t, func(a2 syntax.Address) {
 			addresses := []syntax.Address{a1, a2}
 			timeout := 100 * time.Millisecond // small to not blow up test runtime
 			log := logging.Log{Quiet: true}

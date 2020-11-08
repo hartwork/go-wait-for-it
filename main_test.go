@@ -28,7 +28,7 @@ func TestInnerMainHelpDisplayed(t *testing.T) {
 }
 
 func TestInnerMainTimout(t *testing.T) {
-	testlab.WithUnavailablePort(t, func(address syntax.Address) {
+	testlab.WithUnusedPort(t, func(address syntax.Address) {
 		err := innerMain([]string{"go-wait-for-it", "-q", "-t", "1", "-s", address.String()})
 		assert.NotNil(t, err)
 	})
