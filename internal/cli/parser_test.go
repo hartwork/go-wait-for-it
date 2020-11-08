@@ -61,7 +61,7 @@ func TestParserWellFormed(t *testing.T) {
 		config, err := Parse(test.args)
 		assert.Nil(t, err)
 		require.NotNil(t, config)
-		assert.Equal(t, *config, test.expectedConfig)
+		assert.Equal(t, test.expectedConfig, *config)
 	}
 }
 

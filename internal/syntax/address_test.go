@@ -13,15 +13,15 @@ import (
 
 func TestAddressToString(t *testing.T) {
 	require.Equal(t,
-		Address{"hostname", 123}.String(),
 		"hostname:123",
+		Address{"hostname", 123}.String(),
 	)
 }
 
 func TestErrorToString(t *testing.T) {
 	require.Equal(t,
-		MalformedAddressError{"no port here"}.Error(),
 		"Malformed address: no port here",
+		MalformedAddressError{"no port here"}.Error(),
 	)
 }
 
@@ -39,8 +39,8 @@ func TestParserWellFormed(t *testing.T) {
 	for _, test := range tests {
 		address, err := ParseAddress(test.candidate)
 		assert.Nil(t, err)
-		assert.Equal(t, address.Host, test.expectedHost)
-		assert.Equal(t, address.Port, test.expectedPort)
+		assert.Equal(t, test.expectedHost, address.Host)
+		assert.Equal(t, test.expectedPort, address.Port)
 	}
 }
 
@@ -57,6 +57,6 @@ func TestParserMalformed(t *testing.T) {
 
 	for _, candidate := range tests {
 		_, err := ParseAddress(candidate)
-		assert.Equal(t, err.Error(), "Malformed address: "+candidate)
+		assert.Equal(t, "Malformed address: "+candidate, err.Error())
 	}
 }

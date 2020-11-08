@@ -14,8 +14,8 @@ import (
 func TestWithListeningPort(t *testing.T) {
 	WithListeningPort(t, func(a1 syntax.Address) {
 		WithListeningPort(t, func(a2 syntax.Address) {
-			assert.NotEqual(t, a1.Port, 0)
-			assert.NotEqual(t, a2.Port, 0)
+			assert.NotEqual(t, 0, a1.Port)
+			assert.NotEqual(t, 0, a2.Port)
 			assert.NotEqual(t, a1.Port, a2.Port)
 		})
 	})
@@ -24,8 +24,8 @@ func TestWithListeningPort(t *testing.T) {
 func TestWithUnusedPort(t *testing.T) {
 	WithUnusedPort(t, func(a1 syntax.Address) {
 		WithUnusedPort(t, func(a2 syntax.Address) {
-			assert.NotEqual(t, a1.Port, 0)
-			assert.NotEqual(t, a2.Port, 0)
+			assert.NotEqual(t, 0, a1.Port)
+			assert.NotEqual(t, 0, a2.Port)
 			// Note: There is no guarantee that the two ports are unequal
 		})
 	})
