@@ -28,7 +28,7 @@ func collect(t *testing.T, file *os.File) string {
 	return string(bytes)
 }
 
-func AssertOutputEquals(t *testing.T, act func(), fileToMock **os.File, expectedOutput string) {
+func WithOutputCapturing(t *testing.T, act func(), fileToMock **os.File) string {
 	originalFile := *fileToMock
 	defer func() {
 		*fileToMock = originalFile
@@ -39,5 +39,10 @@ func AssertOutputEquals(t *testing.T, act func(), fileToMock **os.File, expected
 
 	act()
 
-	assert.Equal(t, collect(t, *fileToMock), expectedOutput)
+	return collect(t, *fileToMock)
+}
+
+func AssertOutputEquals(t *testing.T, act func(), fileToMock **os.File, expectedOutput string) {
+	actualOutput := WithOutputCapturing(t, act, fileToMock)
+	assert.Equal(t, expectedOutput, actualOutput)
 }
