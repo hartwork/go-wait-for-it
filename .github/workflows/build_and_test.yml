@@ -41,7 +41,7 @@ jobs:
           set -e
           git ls-files \*.go | xargs gofmt -s -w
           git ls-files \*.go | xargs git diff --exit-code --
-      - name: "Require empty diff for: go tidy"
+      - name: "Require empty diff for: go mod tidy"
         run: |-
           set -e
           go mod tidy -v
