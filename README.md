@@ -13,7 +13,7 @@ written in Go 1.14+.
 
 It supports waiting for multiple services concurrently by default,
 and has a test coverage of 100%.
-If you do find bugs, [please file a report](https://github.com/hartwork/go-wait-for-it).
+If you do find bugs, [please file a report](https://github.com/hartwork/go-wait-for-it/issues).
 Thank you!
 
 
