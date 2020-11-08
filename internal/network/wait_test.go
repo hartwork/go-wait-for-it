@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/hartwork/go-wait-for-it/internal/logging"
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
 	"github.com/hartwork/go-wait-for-it/internal/testlab"
 	"github.com/stretchr/testify/assert"
@@ -59,5 +60,33 @@ func TestWaitForAddressWithTimeoutFailure(t *testing.T) {
 
 		result := <-results
 		assert.NotNil(t, result.err)
+	})
+}
+
+func TestWaitForMultipleAddressesWithTimeoutSuccess(t *testing.T) {
+	testlab.WithAvailablePort(t, func(a1 syntax.Address) {
+		testlab.WithAvailablePort(t, func(a2 syntax.Address) {
+			addresses := []syntax.Address{a1, a2}
+			timeout := 2 * time.Second
+			log := logging.Log{Quiet: true}
+
+			err := WaitForMultipleAddressesWithTimeout(addresses, timeout, log)
+
+			assert.Nil(t, err)
+		})
+	})
+}
+
+func TestWaitForMultipleAddressesWithTimeoutFailure(t *testing.T) {
+	testlab.WithAvailablePort(t, func(a1 syntax.Address) {
+		testlab.WithUnavailablePort(t, func(a2 syntax.Address) {
+			addresses := []syntax.Address{a1, a2}
+			timeout := 100 * time.Millisecond // small to not blow up test runtime
+			log := logging.Log{Quiet: true}
+
+			err := WaitForMultipleAddressesWithTimeout(addresses, timeout, log)
+
+			assert.NotNil(t, err)
+		})
 	})
 }
