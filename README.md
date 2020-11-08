@@ -13,6 +13,18 @@ If you do find bugs, [please file a report](https://github.com/hartwork/go-wait-
 Thank you!
 
 
+## Install and run
+
+```console
+$ go version
+go version go1.14.6 linux/amd64
+$ go get github.com/hartwork/go-wait-for-it
+$ export PATH="${PATH}:$(go env GOPATH)/bin"
+$ go-wait-for-it --version
+wait-for-it 1.0.0
+```
+
+
 ## Build and run
 
 ```console
