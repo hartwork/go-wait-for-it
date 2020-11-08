@@ -94,3 +94,21 @@ func TestParserVersionOutput(t *testing.T) {
 		assert.Nil(t, config)
 	}, &os.Stdout, "wait-for-it 1.0.0\n")
 }
+
+func TestParserUnknownFlag(t *testing.T) {
+	stderrOutput := mocking.WithOutputCapturing(t, func() {
+		config, err := Parse([]string{"--no-such-thing"})
+		assert.NotNil(t, err)
+		assert.Nil(t, config)
+	}, &os.Stderr)
+	assert.Contains(t, stderrOutput, "unknown flag: --no-such-thing")
+}
+
+func TestParserMalformedAddress(t *testing.T) {
+	stderrOutput := mocking.WithOutputCapturing(t, func() {
+		config, err := Parse([]string{"-s", "no colon here"})
+		assert.NotNil(t, err)
+		assert.Nil(t, config)
+	}, &os.Stderr)
+	assert.Contains(t, stderrOutput, "Malformed address: no colon here")
+}
