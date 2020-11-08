@@ -29,7 +29,8 @@ jobs:
               sh -c 'exit 123' \
             || [ $? = 123 ]
           go test -v -coverprofile=cover.out ./...
-          go tool cover -func=cover.out
+          go tool cover -func=cover.out | tee cover-report.txt
+          [[ $(grep ^total: < cover-report.txt | awk '{print $3}') = 100.0% ]]
       - name: "Require empty diff for: goimports"
         run: |-
           set -e
