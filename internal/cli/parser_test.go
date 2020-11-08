@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hartwork/go-wait-for-it/internal/mocking"
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
+	"github.com/hartwork/go-wait-for-it/internal/testlab"
 	"github.com/lithammer/dedent"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -80,7 +80,7 @@ func TestParserHelpOutput(t *testing.T) {
 		  -v, --version           version for wait-for-it
 		`)[1:] // drop leading newline
 
-	mocking.AssertOutputEquals(t, func() {
+	testlab.AssertOutputEquals(t, func() {
 		config, err := Parse([]string{"--help"})
 		assert.Nil(t, err)
 		assert.Nil(t, config)
@@ -88,7 +88,7 @@ func TestParserHelpOutput(t *testing.T) {
 }
 
 func TestParserVersionOutput(t *testing.T) {
-	mocking.AssertOutputEquals(t, func() {
+	testlab.AssertOutputEquals(t, func() {
 		config, err := Parse([]string{"--version"})
 		assert.Nil(t, err)
 		assert.Nil(t, config)
@@ -96,7 +96,7 @@ func TestParserVersionOutput(t *testing.T) {
 }
 
 func TestParserUnknownFlag(t *testing.T) {
-	stderrOutput := mocking.WithOutputCapturing(t, func() {
+	stderrOutput := testlab.WithOutputCapturing(t, func() {
 		config, err := Parse([]string{"--no-such-thing"})
 		assert.NotNil(t, err)
 		assert.Nil(t, config)
@@ -105,7 +105,7 @@ func TestParserUnknownFlag(t *testing.T) {
 }
 
 func TestParserMalformedAddress(t *testing.T) {
-	stderrOutput := mocking.WithOutputCapturing(t, func() {
+	stderrOutput := testlab.WithOutputCapturing(t, func() {
 		config, err := Parse([]string{"-s", "no colon here"})
 		assert.NotNil(t, err)
 		assert.Nil(t, config)

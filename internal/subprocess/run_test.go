@@ -10,14 +10,14 @@ import (
 	"testing"
 
 	"github.com/hartwork/go-wait-for-it/internal/logging"
-	"github.com/hartwork/go-wait-for-it/internal/mocking"
+	"github.com/hartwork/go-wait-for-it/internal/testlab"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestRunCommand(t *testing.T) {
 	log := logging.Log{Quiet: true}
-	mocking.AssertOutputEquals(t, func() {
-		mocking.AssertOutputEquals(t, func() {
+	testlab.AssertOutputEquals(t, func() {
+		testlab.AssertOutputEquals(t, func() {
 			RunCommand([]string{"sh", "-c", "echo 111; echo 222 >&2"}, log)
 		}, &os.Stderr, "222\n")
 	}, &os.Stdout, "111\n")
