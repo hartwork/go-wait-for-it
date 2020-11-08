@@ -5,21 +5,18 @@
 package testlab
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"golang.org/x/sys/unix"
 )
 
-func newMemoryFile(t *testing.T) *os.File {
-	fd, err := unix.MemfdCreate("fake stdout", 0)
+func newTempFile(t *testing.T) *os.File {
+	fd, err := ioutil.TempFile("", "go-wait-for-it-testing-")
 	require.Nil(t, err)
-	filename := fmt.Sprintf("/proc/self/fd/%d", fd)
-	return os.NewFile(uintptr(fd), filename)
+	return fd
 }
 
 func collect(t *testing.T, file *os.File) string {
@@ -34,8 +31,9 @@ func WithOutputCapturing(t *testing.T, act func(), fileToMock **os.File) string 
 		*fileToMock = originalFile
 	}()
 
-	*fileToMock = newMemoryFile(t)
+	*fileToMock = newTempFile(t)
 	defer (*fileToMock).Close()
+	defer os.Remove((*fileToMock).Name())
 
 	act()
 
