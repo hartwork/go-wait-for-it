@@ -46,6 +46,10 @@ func Parse(args []string) (config *Config, err error) {
 				addresses = append(addresses, address)
 			}
 
+			if err != nil {
+				return
+			}
+
 			config = &Config{
 				addresses,
 				args,
