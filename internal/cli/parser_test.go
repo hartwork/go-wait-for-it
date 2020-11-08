@@ -5,10 +5,13 @@
 package cli
 
 import (
+	"os"
 	"testing"
 	"time"
 
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
+	"github.com/hartwork/go-wait-for-it/internal/testlab"
+	"github.com/lithammer/dedent"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -60,4 +63,52 @@ func TestParserWellFormed(t *testing.T) {
 		require.NotNil(t, config)
 		assert.Equal(t, *config, test.expectedConfig)
 	}
+}
+
+func TestParserHelpOutput(t *testing.T) {
+	expectedOutput := dedent.Dedent(`
+		Wait for service(s) to be available before executing a command.
+
+		Usage:
+		  wait-for-it [flags] [-s|--service [HOST]:PORT]... [--] [COMMAND [ARG ..]]
+
+		Flags:
+		  -h, --help              help for wait-for-it
+		  -q, --quiet             do not output any status messages
+		  -s, --service strings   services to test (format '[HOST]:PORT')
+		  -t, --timeout uint      timeout in seconds, 0 for no timeout (default 15)
+		  -v, --version           version for wait-for-it
+		`)[1:] // drop leading newline
+
+	testlab.AssertOutputEquals(t, func() {
+		config, err := Parse([]string{"--help"})
+		assert.Nil(t, err)
+		assert.Nil(t, config)
+	}, &os.Stdout, expectedOutput)
+}
+
+func TestParserVersionOutput(t *testing.T) {
+	testlab.AssertOutputEquals(t, func() {
+		config, err := Parse([]string{"--version"})
+		assert.Nil(t, err)
+		assert.Nil(t, config)
+	}, &os.Stdout, "wait-for-it 1.0.0\n")
+}
+
+func TestParserUnknownFlag(t *testing.T) {
+	stderrOutput := testlab.WithOutputCapturing(t, func() {
+		config, err := Parse([]string{"--no-such-thing"})
+		assert.NotNil(t, err)
+		assert.Nil(t, config)
+	}, &os.Stderr)
+	assert.Contains(t, stderrOutput, "unknown flag: --no-such-thing")
+}
+
+func TestParserMalformedAddress(t *testing.T) {
+	stderrOutput := testlab.WithOutputCapturing(t, func() {
+		config, err := Parse([]string{"-s", "no colon here"})
+		assert.NotNil(t, err)
+		assert.Nil(t, config)
+	}, &os.Stderr)
+	assert.Contains(t, stderrOutput, "Malformed address: no colon here")
 }

@@ -2,15 +2,15 @@
 
 ## About
 
-**go-wait-for-it** is a mostly complete re-write of
+**go-wait-for-it** is a lookalike of
+(the perfectly fine)
 Python [wait-for-it](https://github.com/clarketm/wait-for-it)
-in Go 1.14+: as an *exercise* in writing code in Go and for *fun*.
-To be clear, there is nothing wrong with the Python version: it's fine.
+written in Go 1.14+.
 
-**go-wait-for-it** is my first full program written in Go
-outside of [A Tour of Go](https://tour.golang.org/).
-As such, you may find *beginner mistakes* in here, at least for the moment.
-The goal is to have production level Go code in here, *eventually*.
+It supports waiting for multiple services concurrently by default,
+and has a test coverage of 100%.
+If you do find bugs, [please file a report](https://github.com/hartwork/go-wait-for-it).
+Thank you!
 
 
 ## Build and run

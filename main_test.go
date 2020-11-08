@@ -5,83 +5,63 @@
 package main
 
 import (
-	"net"
+	"os"
 	"testing"
-	"time"
 
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
+	"github.com/hartwork/go-wait-for-it/internal/testlab"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
-func withAvailablePort(t *testing.T, actUpon func(syntax.Address)) {
-	listener, err := net.Listen("tcp", ":0")
-	require.Nil(t, err)
-	defer listener.Close()
-
-	address, err := syntax.ParseAddress(listener.Addr().String())
-	require.Nil(t, err)
-
-	actUpon(address)
+func TestInnerMainUsageError(t *testing.T) {
+	testlab.WithOutputCapturing(t, func() {
+		err := innerMain([]string{"go-wait-for-it", "--no-such-thing"})
+		assert.NotNil(t, err)
+	}, &os.Stderr)
 }
 
-func withUnavailablePort(t *testing.T, actUpon func(syntax.Address)) {
-	listener, err := net.Listen("tcp", ":0")
-	require.Nil(t, err)
-
-	address, err := syntax.ParseAddress(listener.Addr().String())
-	require.Nil(t, err)
-
-	listener.Close()
-
-	actUpon(address)
+func TestInnerMainHelpDisplayed(t *testing.T) {
+	testlab.WithOutputCapturing(t, func() {
+		err := innerMain([]string{"go-wait-for-it", "--help"})
+		assert.Nil(t, err)
+	}, &os.Stdout)
 }
 
-func TestWaitForAddress(t *testing.T) {
-	withAvailablePort(t, func(address syntax.Address) {
-		port := address.Port
-
-		addresses := []syntax.Address{
-			{"localhost", port},
-			{"127.0.0.1", port},
-			{"[::]", port},
-			{"", port},
-		}
-
-		deadlineCombined := time.After(2 * time.Second)
-		for _, address := range addresses {
-			available := waitForAddress(address)
-			select {
-			case <-available:
-			case <-deadlineCombined:
-				t.Errorf("waitForAddress should be long done by now.")
-			}
-		}
+func TestInnerMainTimout(t *testing.T) {
+	testlab.WithUnusedPort(t, func(address syntax.Address) {
+		err := innerMain([]string{"go-wait-for-it", "-q", "-t", "1", "-s", address.String()})
+		assert.NotNil(t, err)
 	})
 }
 
-func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
-	withAvailablePort(t, func(address syntax.Address) {
-		timeout := 2 * time.Second
-		startedAt := time.Now()
-		results := make(chan connectResult)
-
-		go waitForAddressWithTimeout(address, timeout, startedAt, results)
-
-		result := <-results
-		assert.Nil(t, result.err)
-	})
+func TestInnerMainRunError(t *testing.T) {
+	err := innerMain([]string{"go-wait-for-it", "-q", "false"})
+	assert.NotNil(t, err)
 }
 
-func TestWaitForAddressWithTimeoutFailure(t *testing.T) {
-	withUnavailablePort(t, func(address syntax.Address) {
-		timeout := 100 * time.Millisecond // small to not blow up test runtime
-		startedAt := time.Now()
-		results := make(chan connectResult)
+func TestInnerMainSuccessWithCommand(t *testing.T) {
+	err := innerMain([]string{"go-wait-for-it", "-q", "true"})
+	assert.Nil(t, err)
+}
 
-		go waitForAddressWithTimeout(address, timeout, startedAt, results)
+func TestInnerMainSuccessWithoutCommand(t *testing.T) {
+	err := innerMain([]string{"go-wait-for-it"})
+	assert.Nil(t, err)
+}
 
-		result := <-results
-		assert.NotNil(t, result.err)
-	})
+func TestMain(t *testing.T) {
+	originalOsArgs := os.Args
+	originalExitFunc := exitFunc
+
+	os.Args = []string{"go-wait-for-it", "-q", "--", "sh", "-c", "exit 123"}
+	exitFunc = func(code int) {
+		assert.Equal(t, 123, code)
+	}
+
+	defer func() {
+		os.Args = originalOsArgs
+		exitFunc = originalExitFunc
+	}()
+
+	main()
 }
