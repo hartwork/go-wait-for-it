@@ -27,11 +27,11 @@ func TestWaitForAddressSuccess(t *testing.T) {
 
 		deadlineCombined := time.After(2 * time.Second)
 		for _, address := range addresses {
-			available := waitForAddress(address)
+			available := waitForAddressForever(address)
 			select {
 			case <-available:
 			case <-deadlineCombined:
-				t.Errorf("waitForAddress should be long done by now.")
+				t.Errorf("waitForAddressForever should be long done by now.")
 			}
 		}
 	})
@@ -41,8 +41,8 @@ func TestWaitForAddressFailure(t *testing.T) {
 	testlab.WithUnusedPort(t, func(address syntax.Address) {
 		timeout := 1250 * time.Millisecond // small to not blow up test runtime
 		select {
-		case <-waitForAddress(address):
-			t.Errorf("waitForAddress was expected to never finish.")
+		case <-waitForAddressForever(address):
+			t.Errorf("waitForAddressForever was expected to never finish.")
 		case <-time.After(timeout):
 		}
 	})
