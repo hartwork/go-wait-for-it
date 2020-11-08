@@ -7,10 +7,17 @@ on:
 - pull_request
 - push
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build_and_test:
     name: Build and test
-    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        runs-on: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
@@ -29,7 +36,8 @@ jobs:
               sh -c 'exit 123' \
             || [ $? = 123 ]
           go test -v -coverprofile=cover.out ./...
-          go tool cover -func=cover.out
+          go tool cover -func=cover.out | tee cover-report.txt
+          [[ $(grep ^total: < cover-report.txt | awk '{print $3}') = 100.0% ]]
       - name: "Require empty diff for: goimports"
         run: |-
           set -e
@@ -41,7 +49,7 @@ jobs:
           set -e
           git ls-files \*.go | xargs gofmt -s -w
           git ls-files \*.go | xargs git diff --exit-code --
-      - name: "Require empty diff for: go tidy"
+      - name: "Require empty diff for: go mod tidy"
         run: |-
           set -e
           go mod tidy -v
