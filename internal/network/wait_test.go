@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWaitForAddress(t *testing.T) {
+func TestWaitForAddressSuccess(t *testing.T) {
 	testlab.WithListeningPort(t, func(address syntax.Address) {
 		port := address.Port
 
@@ -27,12 +27,23 @@ func TestWaitForAddress(t *testing.T) {
 
 		deadlineCombined := time.After(2 * time.Second)
 		for _, address := range addresses {
-			available := waitForAddress(address)
+			available := waitForAddressForever(address)
 			select {
 			case <-available:
 			case <-deadlineCombined:
-				t.Errorf("waitForAddress should be long done by now.")
+				t.Errorf("waitForAddressForever should be long done by now.")
 			}
+		}
+	})
+}
+
+func TestWaitForAddressFailure(t *testing.T) {
+	testlab.WithUnusedPort(t, func(address syntax.Address) {
+		timeout := 1250 * time.Millisecond // small to not blow up test runtime
+		select {
+		case <-waitForAddressForever(address):
+			t.Errorf("waitForAddressForever was expected to never finish.")
+		case <-time.After(timeout):
 		}
 	})
 }
