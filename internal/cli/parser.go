@@ -6,6 +6,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
@@ -20,7 +21,7 @@ type Config struct {
 }
 
 func report(err error) {
-	fmt.Println("Error:", err)
+	fmt.Fprintln(os.Stderr, "Error:", err)
 }
 
 func Parse(args []string) (config *Config, err error) {
