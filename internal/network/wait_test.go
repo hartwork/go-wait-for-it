@@ -5,40 +5,16 @@
 package network
 
 import (
-	"net"
 	"testing"
 	"time"
 
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
+	"github.com/hartwork/go-wait-for-it/internal/testlab"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
-func withAvailablePort(t *testing.T, actUpon func(syntax.Address)) {
-	listener, err := net.Listen("tcp", ":0")
-	require.Nil(t, err)
-	defer listener.Close()
-
-	address, err := syntax.ParseAddress(listener.Addr().String())
-	require.Nil(t, err)
-
-	actUpon(address)
-}
-
-func withUnavailablePort(t *testing.T, actUpon func(syntax.Address)) {
-	listener, err := net.Listen("tcp", ":0")
-	require.Nil(t, err)
-
-	address, err := syntax.ParseAddress(listener.Addr().String())
-	require.Nil(t, err)
-
-	listener.Close()
-
-	actUpon(address)
-}
-
 func TestWaitForAddress(t *testing.T) {
-	withAvailablePort(t, func(address syntax.Address) {
+	testlab.WithAvailablePort(t, func(address syntax.Address) {
 		port := address.Port
 
 		addresses := []syntax.Address{
@@ -61,7 +37,7 @@ func TestWaitForAddress(t *testing.T) {
 }
 
 func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
-	withAvailablePort(t, func(address syntax.Address) {
+	testlab.WithAvailablePort(t, func(address syntax.Address) {
 		timeout := 2 * time.Second
 		startedAt := time.Now()
 		results := make(chan connectResult)
@@ -74,7 +50,7 @@ func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
 }
 
 func TestWaitForAddressWithTimeoutFailure(t *testing.T) {
-	withUnavailablePort(t, func(address syntax.Address) {
+	testlab.WithUnavailablePort(t, func(address syntax.Address) {
 		timeout := 100 * time.Millisecond // small to not blow up test runtime
 		startedAt := time.Now()
 		results := make(chan connectResult)
