@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/hartwork/go-wait-for-it/internal/syntax"
+	"github.com/lithammer/dedent"
 	"github.com/spf13/cobra"
 )
 
@@ -25,6 +26,11 @@ func report(err error) {
 }
 
 func Parse(args []string) (config *Config, err error) {
+	usageFooter := dedent.Dedent(`
+		go-wait-for-it is software libre, licensed under the AGPL v3 or later license.
+		Please report bugs at https://github.com/hartwork/go-wait-for-it/issues.  Thank you!
+	`)
+
 	var services []string
 	var quiet bool
 	var timeoutSeconds uint
@@ -69,6 +75,8 @@ func Parse(args []string) (config *Config, err error) {
 		15, "timeout in seconds, 0 for no timeout")
 	rootCommand.Flags().BoolVarP(&quiet, "quiet", "q",
 		false, "do not output any status messages")
+
+	rootCommand.SetUsageTemplate(rootCommand.UsageTemplate() + usageFooter)
 
 	rootCommand.SetArgs(args)
 
