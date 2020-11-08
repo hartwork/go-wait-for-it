@@ -30,14 +30,19 @@ jobs:
             || [ $? = 123 ]
           go test -v -coverprofile=cover.out ./...
           go tool cover -func=cover.out
-      - name: Require empty diff for goimports
+      - name: "Require empty diff for: goimports"
         run: |-
           set -e
-          go get golang.org/x/tools/cmd/goimports
+          ( cd /tmp && go get golang.org/x/tools/cmd/goimports )
           git ls-files \*.go | xargs goimports -w
           git ls-files \*.go | xargs git diff --exit-code --
-      - name: Require empty diff for gofmt
+      - name: "Require empty diff for: gofmt"
         run: |-
           set -e
           git ls-files \*.go | xargs gofmt -s -w
           git ls-files \*.go | xargs git diff --exit-code --
+      - name: "Require empty diff for: go tidy"
+        run: |-
+          set -e
+          go mod tidy -v
+          git diff --exit-code -- go.mod go.sum
