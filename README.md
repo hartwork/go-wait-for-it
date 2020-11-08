@@ -1,3 +1,7 @@
+![GitHub Actions: Build and test](https://github.com/hartwork/go-wait-for-it/workflows/Build%20and%20test/badge.svg)
+![Test coverage](./coverage_badge.png)
+
+
 # go-wait-for-it
 
 ## About
