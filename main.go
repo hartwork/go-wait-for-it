@@ -13,6 +13,8 @@ import (
 	"github.com/hartwork/go-wait-for-it/internal/subprocess"
 )
 
+var exitFunc func(int) = os.Exit
+
 func innerMain(argv []string) error {
 	config, err := cli.Parse(argv[1:])
 	if err != nil {
@@ -37,5 +39,5 @@ func innerMain(argv []string) error {
 }
 
 func main() {
-	os.Exit(subprocess.ExitCodeFrom(innerMain(os.Args)))
+	exitFunc(subprocess.ExitCodeFrom(innerMain(os.Args)))
 }
