@@ -51,10 +51,9 @@ func TestWaitForAddressFailure(t *testing.T) {
 func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
 	testlab.WithListeningPort(t, func(address syntax.Address) {
 		timeout := 2 * time.Second
-		startedAt := time.Now()
 		results := make(chan connectResult)
 
-		go waitForAddressWithTimeout(address, timeout, startedAt, results)
+		go waitForAddressWithTimeout(address, timeout, results)
 
 		result := <-results
 		assert.Nil(t, result.err)
@@ -64,10 +63,9 @@ func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
 func TestWaitForAddressWithTimeoutFailure(t *testing.T) {
 	testlab.WithUnusedPort(t, func(address syntax.Address) {
 		timeout := 100 * time.Millisecond // small to not blow up test runtime
-		startedAt := time.Now()
 		results := make(chan connectResult)
 
-		go waitForAddressWithTimeout(address, timeout, startedAt, results)
+		go waitForAddressWithTimeout(address, timeout, results)
 
 		result := <-results
 		assert.NotNil(t, result.err)

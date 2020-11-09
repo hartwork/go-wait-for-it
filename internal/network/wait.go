@@ -14,9 +14,9 @@ import (
 )
 
 type connectResult struct {
-	address  syntax.Address
-	duration time.Duration
-	err      error
+	address   syntax.Address
+	stoppedAt time.Time
+	err       error
 }
 
 func waitForAddressForever(address syntax.Address) <-chan bool {
@@ -35,9 +35,7 @@ func waitForAddressForever(address syntax.Address) <-chan bool {
 	return available
 }
 
-func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, startedAt time.Time, results chan<- connectResult) {
-	duration := timeout
-
+func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, results chan<- connectResult) {
 	deadline := make(<-chan time.Time)
 	if timeout > 0 {
 		deadline = time.After(timeout)
@@ -47,12 +45,11 @@ func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, st
 
 	select {
 	case <-waitForAddressForever(address):
-		duration = time.Now().Sub(startedAt)
 	case <-deadline:
 		err = fmt.Errorf("Failed to connect to %s for %s.", address, timeout)
 	}
 
-	results <- connectResult{address, duration, err}
+	results <- connectResult{address, time.Now(), err}
 }
 
 func WaitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout time.Duration, log logging.Log) (err error) {
@@ -61,12 +58,13 @@ func WaitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout tim
 
 	for _, address := range addresses {
 		log.Neutral("Trying to connect to %s...", address)
-		go waitForAddressWithTimeout(address, timeout, startedAt, results)
+		go waitForAddressWithTimeout(address, timeout, results)
 	}
 
 	for range addresses {
 		if result := <-results; result.err == nil {
-			log.Success("Connected to %s after %s.", result.address, result.duration)
+			duration := result.stoppedAt.Sub(startedAt)
+			log.Success("Connected to %s after %s.", result.address, duration)
 		} else {
 			log.Error(result.err.Error())
 			err = result.err // the first error is as good as the last, here
