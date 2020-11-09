@@ -82,7 +82,7 @@ func TestParserHelpOutput(t *testing.T) {
 		  -t, --timeout uint      timeout in seconds, 0 for no timeout (default 15)
 		  -v, --version           version for wait-for-it
 
-		go-wait-for-it is software libre, licensed under the AGPL v3 or later license.
+		wait-for-it is software libre, licensed under the AGPL v3 or later license.
 		Please report bugs at https://github.com/hartwork/go-wait-for-it/issues.  Thank you!
 	`)[1:] // drop leading newline
 
@@ -98,7 +98,7 @@ func TestParserVersionOutput(t *testing.T) {
 		config, err := Parse([]string{"--version"})
 		assert.Nil(t, err)
 		assert.Nil(t, config)
-	}, &os.Stdout, "wait-for-it 1.0.0\n")
+	}, &os.Stdout, "wait-for-it 2.0.0\n")
 }
 
 func TestParserUnknownFlag(t *testing.T) {

@@ -6,7 +6,7 @@
 
 ## About
 
-**go-wait-for-it** is a lookalike of
+**wait-for-it** is a lookalike of
 (the perfectly fine)
 Python [wait-for-it](https://github.com/clarketm/wait-for-it)
 written in Go 1.14+.
@@ -24,8 +24,8 @@ $ go version
 go version go1.14.6 linux/amd64
 $ go get github.com/hartwork/go-wait-for-it
 $ export PATH="${PATH}:$(go env GOPATH)/bin"
-$ go-wait-for-it --version
-wait-for-it 1.0.0
+$ wait-for-it --version
+wait-for-it 2.0.0
 ```
 
 
@@ -35,15 +35,15 @@ wait-for-it 1.0.0
 $ go version
 go version go1.14.6 linux/amd64
 $ go build .
-$ ./go-wait-for-it --version
-wait-for-it 1.0.0
+$ ./wait-for-it --version
+wait-for-it 2.0.0
 ```
 
 
 ## Examples
 
 ```console
-$ ./go-wait-for-it -t 2 -s :631 -s localhost:631 -s 127.0.0.1:631 -- echo 'CUPS is available'
+$ wait-for-it -t 2 -s :631 -s localhost:631 -s 127.0.0.1:631 -- echo 'CUPS is very available'
 [*] Trying to connect to :631...
 [*] Trying to connect to localhost:631...
 [*] Trying to connect to 127.0.0.1:631...
@@ -51,7 +51,7 @@ $ ./go-wait-for-it -t 2 -s :631 -s localhost:631 -s 127.0.0.1:631 -- echo 'CUPS 
 [+] Connected to :631 after 158.548µs.
 [+] Connected to localhost:631 after 381.536µs.
 [*] Running command: echo CUPS is available
-CUPS is available
+CUPS is very available
 [+] Command succeeded.
 ```
 
@@ -59,7 +59,7 @@ CUPS is available
 ## Usage
 
 ```console
-$ go-wait-for-it --help
+$ wait-for-it --help
 Wait for service(s) to be available before executing a command.
 
 Usage:
@@ -72,7 +72,7 @@ Flags:
   -t, --timeout uint      timeout in seconds, 0 for no timeout (default 15)
   -v, --version           version for wait-for-it
 
-go-wait-for-it is software libre, licensed under the AGPL v3 or later license.
+wait-for-it is software libre, licensed under the AGPL v3 or later license.
 Please report bugs at https://github.com/hartwork/go-wait-for-it/issues.  Thank you!
 ```
 
@@ -82,6 +82,7 @@ Please report bugs at https://github.com/hartwork/go-wait-for-it/issues.  Thank 
 ### Go
 
 - [`github.com/alioygur/wait-for`](https://github.com/alioygur/wait-for)
+- [`github.com/hartwork/go-wait-for-it/`](https://github.com/hartwork/go-wait-for-it/) — the one you are looking at
 - [`github.com/maxcnunes/waitforit`](https://github.com/maxcnunes/waitforit)
 
 

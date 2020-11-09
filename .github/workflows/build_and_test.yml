@@ -26,9 +26,9 @@ jobs:
       - name: Build and test
         run: |-
           set -e
-          go build .
-          ./go-wait-for-it --help
-          ./go-wait-for-it \
+          go build ./cmd/wait-for-it
+          ./wait-for-it --help
+          ./wait-for-it \
               --timeout 2 \
               --service github.com:80 \
               --service github.com:443 \
