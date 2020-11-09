@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hartwork/go-wait-for-it/internal/syntax"
+	"github.com/hartwork/go-wait-for-it/internal/network"
 	"github.com/hartwork/go-wait-for-it/internal/testlab"
 	"github.com/lithammer/dedent"
 	"github.com/stretchr/testify/assert"
@@ -38,7 +38,10 @@ func TestParserWellFormed(t *testing.T) {
 				"--",
 				"echo", "hello",
 			}, Config{
-				[]syntax.Address{{"h1", 1}, {"h2", 2}},
+				[]network.Address{
+					network.NewAddressUnchecked("h1", 1),
+					network.NewAddressUnchecked("h2", 2),
+				},
 				[]string{"echo", "hello"},
 				true,
 				2 * time.Second,

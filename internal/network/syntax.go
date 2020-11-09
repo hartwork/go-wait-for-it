@@ -2,7 +2,7 @@
  * Copyright (C) 2020 Sebastian Pipping <sebastian@pipping.org>
  * Licensed under AGPL v3 or later
  */
-package syntax
+package network
 
 import (
 	"fmt"
@@ -11,13 +11,8 @@ import (
 	"strings"
 )
 
-type Address struct {
-	Host string
-	Port uint16
-}
-
-func (a Address) String() string {
-	return fmt.Sprintf("%s:%d", a.Host, a.Port)
+func (a addressInfo) String() string {
+	return fmt.Sprintf("%s:%d", a.host, a.port)
 }
 
 type MalformedAddressError struct {
@@ -28,8 +23,8 @@ func (e MalformedAddressError) Error() string {
 	return fmt.Sprintf("Malformed address: %s", e.value)
 }
 
-func ParseAddress(text string) (address Address, syntaxError error) {
-	syntaxError = MalformedAddressError{text}
+func ParseAddress(text string) (address Address, networkError error) {
+	networkError = MalformedAddressError{text}
 
 	host, portText, err := net.SplitHostPort(text)
 	if err != nil {
@@ -53,5 +48,5 @@ func ParseAddress(text string) (address Address, syntaxError error) {
 		host = "[" + host + "]" // wrapping of IPv6 addresses
 	}
 
-	return Address{host, uint16(port)}, nil
+	return addressInfo{host, uint16(port)}, nil
 }

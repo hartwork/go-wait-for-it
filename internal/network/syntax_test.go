@@ -2,7 +2,7 @@
  * Copyright (C) 2020 Sebastian Pipping <sebastian@pipping.org>
  * Licensed under AGPL v3 or later
  */
-package syntax
+package network
 
 import (
 	"testing"
@@ -14,7 +14,7 @@ import (
 func TestAddressToString(t *testing.T) {
 	require.Equal(t,
 		"hostname:123",
-		Address{"hostname", 123}.String(),
+		NewAddressUnchecked("hostname", 123).String(),
 	)
 }
 
@@ -39,8 +39,8 @@ func TestParserWellFormed(t *testing.T) {
 	for _, test := range tests {
 		address, err := ParseAddress(test.candidate)
 		assert.Nil(t, err)
-		assert.Equal(t, test.expectedHost, address.Host)
-		assert.Equal(t, test.expectedPort, address.Port)
+		assert.Equal(t, test.expectedHost, address.Host())
+		assert.Equal(t, test.expectedPort, address.Port())
 	}
 }
 

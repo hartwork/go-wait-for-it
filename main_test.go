@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hartwork/go-wait-for-it/internal/syntax"
+	"github.com/hartwork/go-wait-for-it/internal/network"
 	"github.com/hartwork/go-wait-for-it/internal/testlab"
 	"github.com/stretchr/testify/assert"
 )
@@ -28,7 +28,7 @@ func TestInnerMainHelpDisplayed(t *testing.T) {
 }
 
 func TestInnerMainTimout(t *testing.T) {
-	testlab.WithUnusedPort(t, func(address syntax.Address) {
+	network.WithUnusedPort(t, func(address network.Address) {
 		err := innerMain([]string{"go-wait-for-it", "-q", "-t", "1", "-s", address.String()})
 		assert.NotNil(t, err)
 	})
