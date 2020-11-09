@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hartwork/go-wait-for-it/internal/network"
-	"github.com/hartwork/go-wait-for-it/internal/testlab"
+	"github.com/hartwork/go-wait-for-it/v2/internal/network"
+	"github.com/hartwork/go-wait-for-it/v2/internal/testlab"
 	"github.com/lithammer/dedent"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

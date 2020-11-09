@@ -7,10 +7,10 @@ package main
 import (
 	"os"
 
-	"github.com/hartwork/go-wait-for-it/internal/cli"
-	"github.com/hartwork/go-wait-for-it/internal/logging"
-	"github.com/hartwork/go-wait-for-it/internal/network"
-	"github.com/hartwork/go-wait-for-it/internal/subprocess"
+	"github.com/hartwork/go-wait-for-it/v2/internal/cli"
+	"github.com/hartwork/go-wait-for-it/v2/internal/logging"
+	"github.com/hartwork/go-wait-for-it/v2/internal/network"
+	"github.com/hartwork/go-wait-for-it/v2/internal/subprocess"
 )
 
 var exitFunc func(int) = os.Exit

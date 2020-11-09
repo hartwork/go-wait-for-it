@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/hartwork/go-wait-for-it/internal/network"
+	"github.com/hartwork/go-wait-for-it/v2/internal/network"
 	"github.com/lithammer/dedent"
 	"github.com/spf13/cobra"
 )
