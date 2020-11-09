@@ -18,11 +18,11 @@ type connectResult struct {
 	err       error
 }
 
-func waitForAddressForever(address Address) <-chan bool {
+func (a addressInfo) waitForForever() <-chan bool {
 	available := make(chan bool, 1)
 	go func() {
 		for {
-			c, err := net.Dial("tcp", address.String())
+			c, err := net.Dial("tcp", a.String())
 			if err == nil {
 				available <- true
 				c.Close()
@@ -43,7 +43,7 @@ func waitForAddressWithTimeout(address Address, timeout time.Duration, results c
 	err := error(nil)
 
 	select {
-	case <-waitForAddressForever(address):
+	case <-address.waitForForever():
 	case <-deadline:
 		err = fmt.Errorf("Failed to connect to %s for %s.", address, timeout)
 	}

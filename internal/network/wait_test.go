@@ -25,7 +25,7 @@ func TestWaitForAddressSuccess(t *testing.T) {
 
 		deadlineCombined := time.After(2 * time.Second)
 		for _, address := range addresses {
-			available := waitForAddressForever(address)
+			available := address.waitForForever()
 			select {
 			case <-available:
 			case <-deadlineCombined:
@@ -39,7 +39,7 @@ func TestWaitForAddressFailure(t *testing.T) {
 	WithUnusedPort(t, func(address Address) {
 		timeout := 1250 * time.Millisecond // small to not blow up test runtime
 		select {
-		case <-waitForAddressForever(address):
+		case <-address.waitForForever():
 			t.Errorf("waitForAddressForever was expected to never finish.")
 		case <-time.After(timeout):
 		}

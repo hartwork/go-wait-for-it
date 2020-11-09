@@ -8,6 +8,8 @@ type Address interface {
 	Host() string
 	Port() uint16
 	String() string
+
+	waitForForever() <-chan bool
 }
 
 type addressInfo struct {
