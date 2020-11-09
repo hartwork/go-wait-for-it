@@ -98,7 +98,7 @@ func TestParserVersionOutput(t *testing.T) {
 		config, err := Parse([]string{"--version"})
 		assert.Nil(t, err)
 		assert.Nil(t, config)
-	}, &os.Stdout, "wait-for-it 1.0.0\n")
+	}, &os.Stdout, "wait-for-it 2.0.0\n")
 }
 
 func TestParserUnknownFlag(t *testing.T) {

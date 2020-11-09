@@ -63,7 +63,7 @@ func Parse(args []string) (config *Config, err error) {
 				timeout,
 			}
 		},
-		Version: "1.0.0",
+		Version: "2.0.0",
 	}
 
 	rootCommand.SetVersionTemplate("{{.Name}} {{.Version}}\n")

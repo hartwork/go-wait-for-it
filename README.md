@@ -25,7 +25,7 @@ go version go1.14.6 linux/amd64
 $ go get github.com/hartwork/go-wait-for-it
 $ export PATH="${PATH}:$(go env GOPATH)/bin"
 $ wait-for-it --version
-wait-for-it 1.0.0
+wait-for-it 2.0.0
 ```
 
 
@@ -36,7 +36,7 @@ $ go version
 go version go1.14.6 linux/amd64
 $ go build .
 $ ./wait-for-it --version
-wait-for-it 1.0.0
+wait-for-it 2.0.0
 ```
 
 
