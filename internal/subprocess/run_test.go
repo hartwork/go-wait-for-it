@@ -15,7 +15,7 @@ import (
 )
 
 func TestRunCommand(t *testing.T) {
-	log := logging.Log{Quiet: true}
+	log := logging.NewNullLog()
 	testlab.AssertOutputEquals(t, func() {
 		testlab.AssertOutputEquals(t, func() {
 			RunCommand([]string{"sh", "-c", "echo 111; echo 222 >&2"}, log)
@@ -33,7 +33,7 @@ func TestExitCodeFromRegular(t *testing.T) {
 		{[]string{"b1788316d2acd022536d5b750e6eb6af01e2ca0e"}, 127}, // no such command
 	}
 
-	log := logging.Log{Quiet: true}
+	log := logging.NewNullLog()
 	for _, test := range tests {
 		actualCode := ExitCodeFrom(RunCommand(test.argv, log))
 		assert.Equal(t, test.expectedCode, actualCode)

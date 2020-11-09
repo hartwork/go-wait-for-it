@@ -24,7 +24,10 @@ func innerMain(argv []string) error {
 		return nil
 	}
 
-	log := logging.Log{Quiet: config.Quiet}
+	log := map[bool]func() logging.Log{
+		true:  logging.NewNullLog,
+		false: logging.NewStdoutLog,
+	}[config.Quiet]()
 
 	if err := network.WaitForMultipleAddressesWithTimeout(config.Addresses, config.Timeout, log); err != nil {
 		log.Error("Aborting...")
