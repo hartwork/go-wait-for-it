@@ -9,7 +9,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/hartwork/go-wait-for-it/internal/logging"
+	"github.com/hartwork/go-wait-for-it/v2/internal/logging"
 )
 
 type connectResult struct {

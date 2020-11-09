@@ -9,7 +9,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/hartwork/go-wait-for-it/internal/logging"
+	"github.com/hartwork/go-wait-for-it/v2/internal/logging"
 )
 
 func RunCommand(argv []string, log logging.Log) error {

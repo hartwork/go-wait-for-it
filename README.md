@@ -22,7 +22,7 @@ Thank you!
 ```console
 $ go version
 go version go1.14.6 linux/amd64
-$ go get github.com/hartwork/go-wait-for-it
+$ go get github.com/hartwork/go-wait-for-it/v2
 $ export PATH="${PATH}:$(go env GOPATH)/bin"
 $ wait-for-it --version
 wait-for-it 2.0.0
@@ -34,8 +34,8 @@ wait-for-it 2.0.0
 ```console
 $ go version
 go version go1.14.6 linux/amd64
-$ go build .
-$ ./wait-for-it --version
+$ ( cd v2 && go build ./cmd/wait-for-it )
+$ ./v2/wait-for-it --version
 wait-for-it 2.0.0
 ```
 

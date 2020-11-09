@@ -1,4 +1,4 @@
-module github.com/hartwork/go-wait-for-it
+module github.com/hartwork/go-wait-for-it/v2
 
 go 1.14
 

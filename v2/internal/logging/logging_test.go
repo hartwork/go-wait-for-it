@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hartwork/go-wait-for-it/internal/testlab"
+	"github.com/hartwork/go-wait-for-it/v2/internal/testlab"
 )
 
 func TestLoggingPlain(t *testing.T) {

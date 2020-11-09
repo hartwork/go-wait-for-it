@@ -8,8 +8,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hartwork/go-wait-for-it/internal/network"
-	"github.com/hartwork/go-wait-for-it/internal/testlab"
+	"github.com/hartwork/go-wait-for-it/v2/internal/network"
+	"github.com/hartwork/go-wait-for-it/v2/internal/testlab"
 	"github.com/stretchr/testify/assert"
 )
 
