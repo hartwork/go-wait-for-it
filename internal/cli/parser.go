@@ -27,7 +27,7 @@ func report(err error) {
 
 func Parse(args []string) (config *Config, err error) {
 	usageFooter := dedent.Dedent(`
-		go-wait-for-it is software libre, licensed under the AGPL v3 or later license.
+		wait-for-it is software libre, licensed under the AGPL v3 or later license.
 		Please report bugs at https://github.com/hartwork/go-wait-for-it/issues.  Thank you!
 	`)
 

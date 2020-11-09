@@ -14,7 +14,7 @@ import (
 )
 
 func newTempFile(t *testing.T) *os.File {
-	fd, err := ioutil.TempFile("", "go-wait-for-it-testing-")
+	fd, err := ioutil.TempFile("", "wait-for-it-testing-")
 	require.Nil(t, err)
 	return fd
 }
