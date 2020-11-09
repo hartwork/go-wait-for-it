@@ -12,6 +12,30 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type addressMock struct {
+	succeed bool
+}
+
+func (a addressMock) Host() string {
+	return "none"
+}
+
+func (a addressMock) Port() uint16 {
+	return 0
+}
+
+func (a addressMock) String() string {
+	return "none:0"
+}
+
+func (a addressMock) waitForForever() <-chan bool {
+	available := make(chan bool, 1)
+	if a.succeed {
+		available <- true
+	}
+	return available
+}
+
 func TestWaitForAddressSuccess(t *testing.T) {
 	WithListeningPort(t, func(address Address) {
 		port := address.Port()
@@ -47,53 +71,49 @@ func TestWaitForAddressFailure(t *testing.T) {
 }
 
 func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
-	WithListeningPort(t, func(address Address) {
-		timeout := 2 * time.Second
-		results := make(chan connectResult)
+	address := addressMock{succeed: true}
+	timeout := 2 * time.Second
+	results := make(chan connectResult)
 
-		go waitForAddressWithTimeout(address, timeout, results)
+	go waitForAddressWithTimeout(address, timeout, results)
 
-		result := <-results
-		assert.Nil(t, result.err)
-	})
+	result := <-results
+	assert.Nil(t, result.err)
 }
 
 func TestWaitForAddressWithTimeoutFailure(t *testing.T) {
-	WithUnusedPort(t, func(address Address) {
-		timeout := 100 * time.Millisecond // small to not blow up test runtime
-		results := make(chan connectResult)
+	address := addressMock{succeed: false}
+	timeout := 100 * time.Millisecond // small to not blow up test runtime
+	results := make(chan connectResult)
 
-		go waitForAddressWithTimeout(address, timeout, results)
+	go waitForAddressWithTimeout(address, timeout, results)
 
-		result := <-results
-		assert.NotNil(t, result.err)
-	})
+	result := <-results
+	assert.NotNil(t, result.err)
 }
 
 func TestWaitForMultipleAddressesWithTimeoutSuccess(t *testing.T) {
-	WithListeningPort(t, func(a1 Address) {
-		WithListeningPort(t, func(a2 Address) {
-			addresses := []Address{a1, a2}
-			timeout := 2 * time.Second
-			log := logging.NewNullLog()
+	addresses := []Address{
+		addressMock{succeed: true},
+		addressMock{succeed: true},
+	}
+	timeout := 2 * time.Second
+	log := logging.NewNullLog()
 
-			err := WaitForMultipleAddressesWithTimeout(addresses, timeout, log)
+	err := WaitForMultipleAddressesWithTimeout(addresses, timeout, log)
 
-			assert.Nil(t, err)
-		})
-	})
+	assert.Nil(t, err)
 }
 
 func TestWaitForMultipleAddressesWithTimeoutFailure(t *testing.T) {
-	WithListeningPort(t, func(a1 Address) {
-		WithUnusedPort(t, func(a2 Address) {
-			addresses := []Address{a1, a2}
-			timeout := 100 * time.Millisecond // small to not blow up test runtime
-			log := logging.NewNullLog()
+	addresses := []Address{
+		addressMock{succeed: true},
+		addressMock{succeed: false},
+	}
+	timeout := 100 * time.Millisecond // small to not blow up test runtime
+	log := logging.NewNullLog()
 
-			err := WaitForMultipleAddressesWithTimeout(addresses, timeout, log)
+	err := WaitForMultipleAddressesWithTimeout(addresses, timeout, log)
 
-			assert.NotNil(t, err)
-		})
-	})
+	assert.NotNil(t, err)
 }
