@@ -12,7 +12,7 @@ import (
 )
 
 func TestLoggingPlain(t *testing.T) {
-	log := Log{Quiet: false}
+	log := NewStdoutLog()
 
 	testlab.AssertOutputEquals(t, func() {
 		log.Neutral("111")
@@ -28,7 +28,7 @@ func TestLoggingPlain(t *testing.T) {
 }
 
 func TestLoggingSprintf(t *testing.T) {
-	log := Log{Quiet: false}
+	log := NewStdoutLog()
 
 	testlab.AssertOutputEquals(t, func() {
 		log.Neutral("%s %s", "111", "222")
@@ -44,7 +44,7 @@ func TestLoggingSprintf(t *testing.T) {
 }
 
 func TestLoggingQuiet(t *testing.T) {
-	log := Log{Quiet: true}
+	log := NewNullLog()
 
 	testlab.AssertOutputEquals(t, func() {
 		log.Neutral("111")

@@ -8,15 +8,25 @@ import (
 	"fmt"
 )
 
-type Log struct {
-	Quiet bool
+type Log interface {
+	Neutral(format string, args ...interface{})
+	Error(format string, args ...interface{})
+	Success(format string, args ...interface{})
 }
 
-func (l Log) log(prefix string, format string, args []interface{}) {
-	if l.Quiet {
-		return
-	}
+type stdoutLog struct{}
 
+type nullLog struct{}
+
+func NewStdoutLog() Log {
+	return stdoutLog{}
+}
+
+func NewNullLog() Log {
+	return nullLog{}
+}
+
+func (l stdoutLog) log(prefix string, format string, args []interface{}) {
 	var message string
 
 	if len(args) > 0 {
@@ -28,14 +38,26 @@ func (l Log) log(prefix string, format string, args []interface{}) {
 	fmt.Printf("%s %s\n", prefix, message)
 }
 
-func (l Log) Neutral(format string, args ...interface{}) {
+func (l stdoutLog) Neutral(format string, args ...interface{}) {
 	l.log("[*]", format, args)
 }
 
-func (l Log) Error(format string, args ...interface{}) {
+func (l nullLog) Neutral(format string, args ...interface{}) {
+	// no-op
+}
+
+func (l stdoutLog) Error(format string, args ...interface{}) {
 	l.log("[-]", format, args)
 }
 
-func (l Log) Success(format string, args ...interface{}) {
+func (l nullLog) Error(format string, args ...interface{}) {
+	// no-op
+}
+
+func (l stdoutLog) Success(format string, args ...interface{}) {
 	l.log("[+]", format, args)
+}
+
+func (l nullLog) Success(format string, args ...interface{}) {
+	// no-op
 }
