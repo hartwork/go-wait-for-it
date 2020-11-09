@@ -11,25 +11,6 @@ import (
 	"strings"
 )
 
-type Address interface {
-	Host() string
-	Port() uint16
-	String() string
-}
-
-type addressInfo struct {
-	host string
-	port uint16
-}
-
-func (a addressInfo) Host() string {
-	return a.host
-}
-
-func (a addressInfo) Port() uint16 {
-	return a.port
-}
-
 func (a addressInfo) String() string {
 	return fmt.Sprintf("%s:%d", a.host, a.port)
 }
@@ -68,8 +49,4 @@ func ParseAddress(text string) (address Address, networkError error) {
 	}
 
 	return addressInfo{host, uint16(port)}, nil
-}
-
-func NewAddressUnchecked(host string, port uint16) Address {
-	return addressInfo{host, port}
 }
