@@ -10,16 +10,15 @@ import (
 	"time"
 
 	"github.com/hartwork/go-wait-for-it/internal/logging"
-	"github.com/hartwork/go-wait-for-it/internal/syntax"
 )
 
 type connectResult struct {
-	address   syntax.Address
+	address   Address
 	stoppedAt time.Time
 	err       error
 }
 
-func waitForAddressForever(address syntax.Address) <-chan bool {
+func waitForAddressForever(address Address) <-chan bool {
 	available := make(chan bool, 1)
 	go func() {
 		for {
@@ -35,7 +34,7 @@ func waitForAddressForever(address syntax.Address) <-chan bool {
 	return available
 }
 
-func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, results chan<- connectResult) {
+func waitForAddressWithTimeout(address Address, timeout time.Duration, results chan<- connectResult) {
 	deadline := make(<-chan time.Time)
 	if timeout > 0 {
 		deadline = time.After(timeout)
@@ -52,7 +51,7 @@ func waitForAddressWithTimeout(address syntax.Address, timeout time.Duration, re
 	results <- connectResult{address, time.Now(), err}
 }
 
-func WaitForMultipleAddressesWithTimeout(addresses []syntax.Address, timeout time.Duration, log logging.Log) (err error) {
+func WaitForMultipleAddressesWithTimeout(addresses []Address, timeout time.Duration, log logging.Log) (err error) {
 	results := make(chan connectResult, len(addresses))
 	startedAt := time.Now()
 

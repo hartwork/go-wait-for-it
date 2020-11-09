@@ -2,7 +2,7 @@
  * Copyright (C) 2020 Sebastian Pipping <sebastian@pipping.org>
  * Licensed under AGPL v3 or later
  */
-package syntax
+package network
 
 import (
 	"fmt"
@@ -28,8 +28,8 @@ func (e MalformedAddressError) Error() string {
 	return fmt.Sprintf("Malformed address: %s", e.value)
 }
 
-func ParseAddress(text string) (address Address, syntaxError error) {
-	syntaxError = MalformedAddressError{text}
+func ParseAddress(text string) (address Address, networkError error) {
+	networkError = MalformedAddressError{text}
 
 	host, portText, err := net.SplitHostPort(text)
 	if err != nil {

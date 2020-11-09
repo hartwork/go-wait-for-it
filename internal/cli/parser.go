@@ -9,13 +9,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/hartwork/go-wait-for-it/internal/syntax"
+	"github.com/hartwork/go-wait-for-it/internal/network"
 	"github.com/lithammer/dedent"
 	"github.com/spf13/cobra"
 )
 
 type Config struct {
-	Addresses []syntax.Address
+	Addresses []network.Address
 	Argv      []string
 	Quiet     bool
 	Timeout   time.Duration
@@ -41,12 +41,12 @@ func Parse(args []string) (config *Config, err error) {
 		Run: func(cmd *cobra.Command, args []string) {
 			timeout := time.Duration(timeoutSeconds) * time.Second
 
-			var addresses []syntax.Address
+			var addresses []network.Address
 			for _, service := range services {
-				address, syntaxError := syntax.ParseAddress(service)
-				if syntaxError != nil {
-					report(syntaxError)
-					err = syntaxError // the first error is as good as the last, here
+				address, networkError := network.ParseAddress(service)
+				if networkError != nil {
+					report(networkError)
+					err = networkError // the first error is as good as the last, here
 					continue
 				}
 				addresses = append(addresses, address)

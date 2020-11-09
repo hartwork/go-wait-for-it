@@ -9,16 +9,14 @@ import (
 	"time"
 
 	"github.com/hartwork/go-wait-for-it/internal/logging"
-	"github.com/hartwork/go-wait-for-it/internal/syntax"
-	"github.com/hartwork/go-wait-for-it/internal/testlab"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestWaitForAddressSuccess(t *testing.T) {
-	testlab.WithListeningPort(t, func(address syntax.Address) {
+	WithListeningPort(t, func(address Address) {
 		port := address.Port
 
-		addresses := []syntax.Address{
+		addresses := []Address{
 			{"localhost", port},
 			{"127.0.0.1", port},
 			{"[::]", port},
@@ -38,7 +36,7 @@ func TestWaitForAddressSuccess(t *testing.T) {
 }
 
 func TestWaitForAddressFailure(t *testing.T) {
-	testlab.WithUnusedPort(t, func(address syntax.Address) {
+	WithUnusedPort(t, func(address Address) {
 		timeout := 1250 * time.Millisecond // small to not blow up test runtime
 		select {
 		case <-waitForAddressForever(address):
@@ -49,7 +47,7 @@ func TestWaitForAddressFailure(t *testing.T) {
 }
 
 func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
-	testlab.WithListeningPort(t, func(address syntax.Address) {
+	WithListeningPort(t, func(address Address) {
 		timeout := 2 * time.Second
 		results := make(chan connectResult)
 
@@ -61,7 +59,7 @@ func TestWaitForAddressWithTimeoutSuccess(t *testing.T) {
 }
 
 func TestWaitForAddressWithTimeoutFailure(t *testing.T) {
-	testlab.WithUnusedPort(t, func(address syntax.Address) {
+	WithUnusedPort(t, func(address Address) {
 		timeout := 100 * time.Millisecond // small to not blow up test runtime
 		results := make(chan connectResult)
 
@@ -73,9 +71,9 @@ func TestWaitForAddressWithTimeoutFailure(t *testing.T) {
 }
 
 func TestWaitForMultipleAddressesWithTimeoutSuccess(t *testing.T) {
-	testlab.WithListeningPort(t, func(a1 syntax.Address) {
-		testlab.WithListeningPort(t, func(a2 syntax.Address) {
-			addresses := []syntax.Address{a1, a2}
+	WithListeningPort(t, func(a1 Address) {
+		WithListeningPort(t, func(a2 Address) {
+			addresses := []Address{a1, a2}
 			timeout := 2 * time.Second
 			log := logging.NewNullLog()
 
@@ -87,9 +85,9 @@ func TestWaitForMultipleAddressesWithTimeoutSuccess(t *testing.T) {
 }
 
 func TestWaitForMultipleAddressesWithTimeoutFailure(t *testing.T) {
-	testlab.WithListeningPort(t, func(a1 syntax.Address) {
-		testlab.WithUnusedPort(t, func(a2 syntax.Address) {
-			addresses := []syntax.Address{a1, a2}
+	WithListeningPort(t, func(a1 Address) {
+		WithUnusedPort(t, func(a2 Address) {
+			addresses := []Address{a1, a2}
 			timeout := 100 * time.Millisecond // small to not blow up test runtime
 			log := logging.NewNullLog()
 
