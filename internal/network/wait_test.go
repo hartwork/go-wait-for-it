@@ -14,13 +14,13 @@ import (
 
 func TestWaitForAddressSuccess(t *testing.T) {
 	WithListeningPort(t, func(address Address) {
-		port := address.Port
+		port := address.Port()
 
 		addresses := []Address{
-			{"localhost", port},
-			{"127.0.0.1", port},
-			{"[::]", port},
-			{"", port},
+			NewAddressUnchecked("localhost", port),
+			NewAddressUnchecked("127.0.0.1", port),
+			NewAddressUnchecked("[::]", port),
+			NewAddressUnchecked("", port),
 		}
 
 		deadlineCombined := time.After(2 * time.Second)
