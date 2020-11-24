@@ -82,7 +82,7 @@ Please report bugs at https://github.com/hartwork/go-wait-for-it/issues.  Thank 
 ### Go
 
 - [`github.com/alioygur/wait-for`](https://github.com/alioygur/wait-for)
-- [`github.com/hartwork/go-wait-for-it/`](https://github.com/hartwork/go-wait-for-it/) — the one you are looking at
+- [`github.com/hartwork/go-wait-for-it`](https://github.com/hartwork/go-wait-for-it) — the one you are looking at
 - [`github.com/maxcnunes/waitforit`](https://github.com/maxcnunes/waitforit)
 - [`github.com/mjeri/go-wait-for-it`](https://github.com/mjeri/go-wait-for-it)
 
