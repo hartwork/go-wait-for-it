@@ -50,7 +50,7 @@ $ wait-for-it -t 2 -s :631 -s localhost:631 -s 127.0.0.1:631 -- echo 'CUPS is ve
 [+] Connected to 127.0.0.1:631 after 201.653µs.
 [+] Connected to :631 after 158.548µs.
 [+] Connected to localhost:631 after 381.536µs.
-[*] Running command: echo CUPS is available
+[*] Running command: echo CUPS is very available
 CUPS is very available
 [+] Command succeeded.
 ```
