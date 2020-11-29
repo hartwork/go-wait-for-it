@@ -27,7 +27,7 @@ jobs:
         run: |-
           set -e
           cd v2
-          go build ./cmd/wait-for-it
+          go build -race ./cmd/wait-for-it
           ./wait-for-it --help
           ./wait-for-it \
               --timeout 2 \
@@ -36,7 +36,7 @@ jobs:
               -- \
               sh -c 'exit 123' \
             || [ $? = 123 ]
-          go test -v -coverprofile=cover.out ./...
+          go test -race -v -coverprofile=cover.out ./...
           go tool cover -func=cover.out | tee cover-report.txt
           [[ $(grep ^total: < cover-report.txt | awk '{print $3}') = 100.0% ]]
       - name: "Require empty diff for: goimports"
