@@ -25,7 +25,7 @@ jobs:
           go-version: '1.14'
       - name: Build and test
         run: |-
-          set -e
+          set -x
           cd v2
           go build -race ./cmd/wait-for-it
           ./wait-for-it --help
@@ -41,18 +41,18 @@ jobs:
           [[ $(grep ^total: < cover-report.txt | awk '{print $3}') = 100.0% ]]
       - name: "Require empty diff for: goimports"
         run: |-
-          set -e
+          set -x
           ( cd /tmp && go get golang.org/x/tools/cmd/goimports )
           git ls-files \*.go | xargs goimports -w
           git ls-files \*.go | xargs git diff --exit-code --
       - name: "Require empty diff for: gofmt"
         run: |-
-          set -e
+          set -x
           git ls-files \*.go | xargs gofmt -s -w
           git ls-files \*.go | xargs git diff --exit-code --
       - name: "Require empty diff for: go mod tidy"
         run: |-
-          set -e
+          set -x
           cd v2
           go mod tidy -v
           git diff --exit-code -- go.mod go.sum
