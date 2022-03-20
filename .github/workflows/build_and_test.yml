@@ -27,7 +27,7 @@ jobs:
         run: |-
           set -x
           cd v2
-          go build -race ./cmd/wait-for-it
+          go build -race -v ./cmd/wait-for-it
           ./wait-for-it --help
           ./wait-for-it \
               --timeout 2 \
