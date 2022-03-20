@@ -38,6 +38,7 @@ jobs:
             || [ $? = 123 ]
           go test -race -v -coverprofile=cover.out ./...
           go tool cover -func=cover.out | tee cover-report.txt
+          go tool cover -html=cover.out -o cover-report.htm
           [[ $(grep ^total: < cover-report.txt | awk '{print $3}') = 100.0% ]]
       - name: "Require empty diff for: goimports"
         run: |-
@@ -56,3 +57,9 @@ jobs:
           cd v2
           go mod tidy -v
           git diff --exit-code -- go.mod go.sum
+      - name: "Create articate for coverage report"
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: coverage__${{ matrix.runs-on }}
+          path: v2/cover*
+          if-no-files-found: error
