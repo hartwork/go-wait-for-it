@@ -28,7 +28,7 @@ func (a addressInfo) waitForForever() <-chan bool {
 				c.Close()
 				break
 			}
-			time.Sleep(500 * time.Millisecond)
+			time.Sleep(100 * time.Millisecond)
 		}
 	}()
 	return available
