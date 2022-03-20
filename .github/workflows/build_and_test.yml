@@ -25,9 +25,9 @@ jobs:
           go-version: '1.14'
       - name: Build and test
         run: |-
-          set -e
+          set -x
           cd v2
-          go build -race ./cmd/wait-for-it
+          go build -race -v ./cmd/wait-for-it
           ./wait-for-it --help
           ./wait-for-it \
               --timeout 2 \
@@ -38,21 +38,28 @@ jobs:
             || [ $? = 123 ]
           go test -race -v -coverprofile=cover.out ./...
           go tool cover -func=cover.out | tee cover-report.txt
+          go tool cover -html=cover.out -o cover-report.htm
           [[ $(grep ^total: < cover-report.txt | awk '{print $3}') = 100.0% ]]
       - name: "Require empty diff for: goimports"
         run: |-
-          set -e
+          set -x
           ( cd /tmp && go get golang.org/x/tools/cmd/goimports )
           git ls-files \*.go | xargs goimports -w
           git ls-files \*.go | xargs git diff --exit-code --
       - name: "Require empty diff for: gofmt"
         run: |-
-          set -e
+          set -x
           git ls-files \*.go | xargs gofmt -s -w
           git ls-files \*.go | xargs git diff --exit-code --
       - name: "Require empty diff for: go mod tidy"
         run: |-
-          set -e
+          set -x
           cd v2
           go mod tidy -v
           git diff --exit-code -- go.mod go.sum
+      - name: "Create articate for coverage report"
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: coverage__${{ matrix.runs-on }}
+          path: v2/cover*
+          if-no-files-found: error

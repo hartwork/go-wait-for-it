@@ -22,13 +22,13 @@ func (a addressInfo) waitForForever() <-chan bool {
 	available := make(chan bool, 1)
 	go func() {
 		for {
-			c, err := net.Dial("tcp", a.String())
+			c, err := net.DialTimeout("tcp", a.String(), 500*time.Millisecond)
 			if err == nil {
 				available <- true
 				c.Close()
 				break
 			}
-			time.Sleep(500 * time.Millisecond)
+			time.Sleep(100 * time.Millisecond)
 		}
 	}()
 	return available
