@@ -8,7 +8,7 @@ updates:
     commit-message:
       include: "scope"
       prefix: "Actions"
-    directory: "/"
+    directory: "/v2/"
     labels:
       - "enhancement"
     schedule:
