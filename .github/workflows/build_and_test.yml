@@ -15,6 +15,7 @@ jobs:
   build_and_test:
     name: Build and test
     strategy:
+      fail-fast: false
       matrix:
         runs-on: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.runs-on }}
