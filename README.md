@@ -9,7 +9,7 @@
 **wait-for-it** is a lookalike of
 (the perfectly fine)
 Python [wait-for-it](https://github.com/clarketm/wait-for-it)
-written in Go 1.14+.
+written in Go 1.16+.
 
 It supports waiting for multiple services concurrently by default,
 and has a test coverage of 100%.
@@ -20,8 +20,6 @@ Thank you!
 ## Install and run
 
 ```console
-$ go version
-go version go1.14.6 linux/amd64
 $ go get github.com/hartwork/go-wait-for-it/v2/cmd/wait-for-it
 $ export PATH="${PATH}:$(go env GOPATH)/bin"
 $ wait-for-it --version
@@ -32,8 +30,6 @@ wait-for-it 2.0.0
 ## Build and run
 
 ```console
-$ go version
-go version go1.14.6 linux/amd64
 $ ( cd v2 && go build ./cmd/wait-for-it )
 $ ./v2/wait-for-it --version
 wait-for-it 2.0.0
