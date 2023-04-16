@@ -24,7 +24,7 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v3.5.2
-      - uses: actions/setup-go@v3.5.0
+      - uses: actions/setup-go@v4.0.0
         with:
           go-version: ${{ matrix.go-version }}
       - name: Build and test
