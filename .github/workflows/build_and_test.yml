@@ -44,7 +44,7 @@ jobs:
       - name: "Require empty diff for: goimports"
         run: |-
           set -x
-          ( cd /tmp && go get golang.org/x/tools/cmd/goimports )
+          ( cd /tmp && go install golang.org/x/tools/cmd/goimports@v0.8.0 )
           git ls-files \*.go | xargs goimports -w
           git ls-files \*.go | xargs git diff --exit-code --
       - name: "Require empty diff for: gofmt"
