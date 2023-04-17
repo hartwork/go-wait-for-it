@@ -23,8 +23,8 @@ jobs:
         runs-on: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.runs-on }}
     steps:
-      - uses: actions/checkout@v3.5.2
-      - uses: actions/setup-go@v4.0.0
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab  # v3.5.2
+      - uses: actions/setup-go@4d34df0c2316fe8122ab82dc22947d607c0c91f9  # v4.0.0
         with:
           go-version: ${{ matrix.go-version }}
       - name: Build and test
@@ -62,7 +62,7 @@ jobs:
           go mod tidy -v
           git diff --exit-code -- go.mod go.sum
       - name: "Create articate for coverage report"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce  # v3.1.2
         with:
           name: coverage__${{ matrix.runs-on }}
           path: v2/cover*
