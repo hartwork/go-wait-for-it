@@ -19,7 +19,7 @@ jobs:
       matrix:
         # The ideas is to cover both the oldest and the youngest supported
         # version, there is no particualr need for anything in between.
-        go-version: ['1.16', '1.20']
+        go-version: ['1.20']
         runs-on: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.runs-on }}
     steps:

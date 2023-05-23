@@ -9,7 +9,7 @@
 **wait-for-it** is a lookalike of
 (the perfectly fine)
 Python [wait-for-it](https://github.com/clarketm/wait-for-it)
-written in Go 1.16+.
+written in Go 1.20+.
 
 It supports waiting for multiple services concurrently by default,
 and has a test coverage of 100%.
