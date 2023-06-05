@@ -20,7 +20,7 @@ Thank you!
 ## Install and run
 
 ```console
-$ go get github.com/hartwork/go-wait-for-it/v2/cmd/wait-for-it
+$ go install github.com/hartwork/go-wait-for-it/v2/cmd/wait-for-it@latest
 $ export PATH="${PATH}:$(go env GOPATH)/bin"
 $ wait-for-it --version
 wait-for-it 2.0.0
@@ -100,6 +100,7 @@ Please report bugs at https://github.com/hartwork/go-wait-for-it/issues.  Thank 
   — package `wait-service` on [crates.io](https://crates.io/crates/wait-service)
 - [`github.com/shenek/wait-for-them`](https://github.com/shenek/wait-for-them)
   — package `wait-for-them` [on crates.io](https://crates.io/crates/wait-for-them)
+- [`github.com/hartwork/rust-for-it`](https://github.com/hartwork/rust-for-it)
 
 
 ### Shell
