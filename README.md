@@ -20,7 +20,7 @@ Thank you!
 ## Install and run
 
 ```console
-$ go get github.com/hartwork/go-wait-for-it/v2/cmd/wait-for-it
+$ go install github.com/hartwork/go-wait-for-it/v2/cmd/wait-for-it@latest
 $ export PATH="${PATH}:$(go env GOPATH)/bin"
 $ wait-for-it --version
 wait-for-it 2.0.0
