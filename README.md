@@ -39,10 +39,12 @@ wait-for-it 2.0.0
 ## Examples
 
 ```console
-$ wait-for-it -t 2 -s :631 -s localhost:631 -s 127.0.0.1:631 -- echo 'CUPS is very available'
+$ wait-for-it -t 2 -s :631 -s [::1]:631 -s localhost:631 -s 127.0.0.1:631 -- echo 'CUPS is very available'
 [*] Trying to connect to :631...
+[*] Trying to connect to [::1]:631...
 [*] Trying to connect to localhost:631...
 [*] Trying to connect to 127.0.0.1:631...
+[+] Connected to [::1]:631 after 5.458196ms.
 [+] Connected to 127.0.0.1:631 after 201.653µs.
 [+] Connected to :631 after 158.548µs.
 [+] Connected to localhost:631 after 381.536µs.
@@ -93,14 +95,14 @@ Please report bugs at https://github.com/hartwork/go-wait-for-it/issues.  Thank 
 
 ### Rust
 
+- [`github.com/Etenil/wait-for-rust`](https://github.com/Etenil/wait-for-rust)
+- [`github.com/hartwork/rust-for-it`](https://github.com/hartwork/rust-for-it)
 - [`github.com/ktitaro/wait-for`](https://github.com/ktitaro/wait-for)
   — package `wait_for` [on crates.io](https://crates.io/crates/wait_for)
-- [`github.com/Etenil/wait-for-rust`](https://github.com/Etenil/wait-for-rust)
 - [`github.com/magiclen/wait-service`](https://github.com/magiclen/wait-service)
   — package `wait-service` on [crates.io](https://crates.io/crates/wait-service)
 - [`github.com/shenek/wait-for-them`](https://github.com/shenek/wait-for-them)
   — package `wait-for-them` [on crates.io](https://crates.io/crates/wait-for-them)
-- [`github.com/hartwork/rust-for-it`](https://github.com/hartwork/rust-for-it)
 
 
 ### Shell
