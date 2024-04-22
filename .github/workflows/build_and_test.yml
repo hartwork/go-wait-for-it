@@ -62,7 +62,7 @@ jobs:
           go mod tidy -v
           git diff --exit-code -- go.mod go.sum
       - name: "Create articate for coverage report"
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3  # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808  # v4.3.3
         with:
           name: coverage__${{ matrix.runs-on }}
           path: v2/cover*
