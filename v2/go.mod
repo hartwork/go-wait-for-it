@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/lithammer/dedent v1.1.0
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
 )
 
